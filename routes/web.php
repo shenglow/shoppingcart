@@ -25,4 +25,7 @@ Route::middleware(['auth:admin'])->prefix('admin')->name('admin.')->group(functi
     // index
     Route::get('/', 'Back\WebsiteController@index');
 
+    // logout
+    Route::get('/admin/logout', 'Back\AccountController@logout')->name('logout');
+
 });
