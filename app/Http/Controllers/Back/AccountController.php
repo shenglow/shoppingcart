@@ -11,16 +11,18 @@ class AccountController extends Controller
 {
     /*
     |--------------------------------------------------------------------------
-    | Login Controller
+    | Account Controller
     |--------------------------------------------------------------------------
     |
-    | This controller handles authenticating users for the application and
+    | This controller handles authenticating admins for the application and
     | redirecting them to your home screen. The controller uses a trait
     | to conveniently provide its functionality to your applications.
     |
     */
 
-    use AuthenticatesUsers;
+    use AuthenticatesUsers {
+        logout as performLogout;
+    }
 
     /**
      * Where to redirect users after login.
@@ -39,11 +41,20 @@ class AccountController extends Controller
         $this->middleware('guest:admin')->except('logout');
     }
 
+    /**
+     * Show login form
+     */
     public function showAdminLoginForm()
     {
         return view('back.login', ['url' => 'admin']);
     }
 
+    /**
+     * Validate required fields and authenticate admin
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
     public function adminLogin(Request $request)
     {
         $this->validate($request, [
@@ -56,5 +67,17 @@ class AccountController extends Controller
             return redirect()->intended('/admin');
         }
         return back()->withInput($request->only('username', 'remember'));
+    }
+
+     /**
+     * Use default logout function to log the user out of the application but override redirect path
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function logout(Request $request)
+    {
+        $this->performLogout($request);
+        return redirect()->to('/admin');
     }
 }
