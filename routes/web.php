@@ -14,3 +14,15 @@
 Route::get('/', function () {
     return view('welcome');
 });
+
+Route::get('/admin/login', 'Back\AccountController@showAdminLoginForm');
+
+Route::post('/admin/login', 'Back\AccountController@adminLogin')->name('admin.login');
+
+// use auth middleware to authenticate
+Route::middleware(['auth:admin'])->prefix('admin')->name('admin.')->group(function () {
+
+    // index
+    Route::get('/', 'Back\WebsiteController@index');
+
+});
