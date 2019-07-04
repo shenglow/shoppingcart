@@ -19,4 +19,11 @@ class Category extends Model
      * @var integer
      */
     protected $primaryKey = 'cid';
+
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
+    protected $fillable = ['name', 'subname', 'show_popular'];
 }

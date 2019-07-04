@@ -57,8 +57,6 @@ class CategoryController extends Controller
      */
     public function store(Request $request)
     {
-        $category = new Category;
-
         $rules = [
             'name' => 'required',
             'subname' => 'required',
@@ -84,13 +82,18 @@ class CategoryController extends Controller
             return redirect()->route('admin.category.create')->withInput();
         }
 
-        $category->name = $request->input('name');
-        $category->subname = $request->input('subname');
-        $category->show_popular = ($request->input('show_popular')) ? true : false;
+        //$category = new Category;
 
-        $category->save();
+        $category = Category::firstOrCreate(
+            ['name' => $request->input('name'), 'subname' => $request->input('subname')],
+            ['show_popular' => ($request->input('show_popular')) ? true : false]
+        );
 
-        $msg = array('content' => '新增成功', 'type' => 'alert-success');
+        if ($category->wasRecentlyCreated) {
+            $msg = array('content' => '新增成功', 'type' => 'alert-success');
+        } else {
+            $msg = array('content' => '新增失敗: 資料重複', 'type' => 'alert-danger');
+        }
 
         Session::flash('msg', $msg);
         return redirect()->route('admin.category.index');
@@ -117,8 +120,6 @@ class CategoryController extends Controller
      */
     public function update(Request $request, $cid)
     {
-        $category = Category::find($cid);
-
         $rules = [
             'name' => 'required',
             'subname' => 'required',
@@ -144,14 +145,24 @@ class CategoryController extends Controller
             return redirect()->route('admin.category.edit')->withInput();
         }
 
-        $category->name = $request->input('name');
-        $category->subname = $request->input('subname');
-        $category->show_popular = ($request->input('show_popular')) ? true : false;
+        $category = Category::find($cid);
 
-        $category->save();
+        $update_fields = [
+            'name'         => $request->input('name'),
+            'subname'      => $request->input('subname'),
+            'show_popular' => ($request->input('show_popular')) ? true : false,
+        ];
 
-        $msg = array('content' => '修改成功', 'type' => 'alert-success');
+        $new_category = Category::firstOrNew($update_fields);
 
+        // Update if the no changes has been made or if no category have been founded
+        if ($new_category->cid == $category->cid OR !$new_category->exists) {
+            $category->update($update_fields);
+            $msg = array('content' => '修改成功', 'type' => 'alert-success');
+        } else {
+            $msg = array('content' => '修改失敗: 資料重複', 'type' => 'alert-danger');
+        }
+        
         Session::flash('msg', $msg);
         return redirect()->route('admin.category.index');
     }
