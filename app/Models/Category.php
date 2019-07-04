@@ -12,4 +12,11 @@ class Category extends Model
      * @var string
      */
     protected $table = 'categories';
+
+    /**
+     * The primary key associated with the table.
+     *
+     * @var integer
+     */
+    protected $primaryKey = 'cid';
 }

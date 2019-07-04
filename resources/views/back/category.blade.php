@@ -28,32 +28,44 @@
             </a>
             @if (count($categories) > 0)
                 <div class="table-responsive">
-                    <table class="table table-bordered" width="100%" cellspacing="0">
+                    <table class="table table-bordered text-center" width="100%" cellspacing="0">
                         <thead>
                             <tr>
                                 <th>類別名稱</th>
                                 <th>子類別名稱</th>
-                                <th class="text-center">顯示熱門商品</th>
+                                <th>顯示熱門商品</th>
+                                <th></th>
                             </tr>
                         </thead>
                         <tbody>
-                        
                             @foreach ($categories as $category)
                                 <tr>
                                     <td>{{ $category->name }}</td>
                                     <td>{{ $category->subname }}</td>
                                     @if ($category->show_popular)
-                                        <td class="text-center text-success">啟用</td>
+                                        <td class="text-success">啟用</td>
                                     @else 
-                                        <td class="text-center text-danger">停用</td>
+                                        <td class="text-danger">停用</td>
                                     @endif
+                                    <td>
+                                        <a href="{{ route('admin.category.edit', $category->cid) }}" class="btn btn-primary">
+                                            <span class="text">編輯</span>
+                                        </a>
+                                        <form method="POST" action="{{ route('admin.category.destroy', $category->cid) }}" class="d-inline-block">
+                                            {{ csrf_field() }}
+                                            {{ method_field('DELETE') }}
+                                            <button type="submit" class="btn btn-danger">
+                                                <span class="text">刪除</span>
+                                            </button>
+                                        </form>
+                                    </td>
                                 </tr>
                             @endforeach
                         </tbody>
                     </table>
                 </div>
             @else
-                <p>No category</p>
+                <p>查無資料</p>
             @endif
         </div>
     </div>
