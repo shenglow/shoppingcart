@@ -26,6 +26,9 @@ Route::middleware(['auth:admin'])->prefix('admin')->name('admin.')->group(functi
     Route::get('/', 'Back\WebsiteController@index');
 
     // logout
-    Route::get('/admin/logout', 'Back\AccountController@logout')->name('logout');
+    Route::get('/logout', 'Back\AccountController@logout')->name('logout');
+
+    // modify product page
+    Route::resource('/category', 'Back\CategoryController', ['except' => ['show']]);
 
 });
