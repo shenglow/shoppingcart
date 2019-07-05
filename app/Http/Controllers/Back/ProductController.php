@@ -43,7 +43,7 @@ class ProductController extends Controller
         foreach($categories as $category) {
             $arr_categories[$category->name][] = array(
                 'cid' => $category->cid,
-                'subname' => $category->subname,
+                'subname' => $category->subname
             );
         }
 
@@ -53,7 +53,13 @@ class ProductController extends Controller
 
         $products = Category::with('products')->where($arr_where)->get();
 
-        return view('back.product', ['user' => $this->user, 'categories' => $arr_categories, 'products' => $products]);
+        return view('back.product', [
+            'user' => $this->user, 
+            'categories' => $arr_categories, 
+            'products' => $products,
+            'c_name' => $c_name,
+            'c_subname' => $c_subname
+        ]);
     }
 
     /**

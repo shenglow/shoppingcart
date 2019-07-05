@@ -29,7 +29,7 @@
                             <select class="form-control" name="c_name" id="c_name">
                                 <option></option>
                                 @foreach($categories as $key => $category)
-                                    <option>{{ $key }}</option>
+                                    <option @if($c_name == $key) selected @endif>{{ $key }}</option>
                                 @endforeach
                             </select>
                         </div>
@@ -75,18 +75,23 @@
                     <tbody>
                         @foreach ($products as $key => $product_list)
                             @foreach ($product_list['products'] as $product)
-                                <td>{{ $product->name }}</td>
-                                <td>{{ $product_list->name }}</td>
-                                <td>{{ $product_list->subname }}</td>
-                                <td>{{ $product->price }}</td>
-                                <td>
-                                    <a href="#" class="btn btn-primary">
-                                        <span class="text">編輯</span>
-                                    </a>
-                                    <a href="#" class="btn btn-danger">
-                                        <span class="text">下架</span>
-                                    </a>
-                                </td>
+                                <tr>
+                                    <td>{{ $product->name }}</td>
+                                    <td>{{ $product_list->name }}</td>
+                                    <td>{{ $product_list->subname }}</td>
+                                    <td>{{ $product->price }}</td>
+                                    <td>
+                                        <a href="{{ route('admin.product.edit', $product->pid) }}" class="btn btn-primary">
+                                            <span class="text">編輯</span>
+                                        </a>
+                                        <a href="{{ route('admin.product.destroy', $product->pid) }}" class="btn btn-danger">
+                                            <span class="text">刪除</span>
+                                        </a>
+                                        <a href="#" class="btn btn-danger">
+                                            <span class="text">下架</span>
+                                        </a>
+                                    </td>
+                                </tr>
                             @endforeach
                         @endforeach
                     </tbody>
@@ -102,20 +107,50 @@
 @section('custom_script')
 <script>
     //dynamic change select's item
-    let category = {!! json_encode($categories) !!};
+    $(document).ready(function() {
 
-    $("#c_name").change(function() {
-        var value = $(this).val();
-        var subselect = $("#c_subname");
+        // category list
+        let category = {!! json_encode($categories) !!};
+        @if (!empty($c_subname))
+        let c_subname = '{!! $c_subname !!}';
+        @endif
 
-        subselect.empty();
-        $("<option />").html('').appendTo(subselect);
+        if ($("#c_name").val() !== '') {
+            var value = $("#c_name").val();
+            var subselect = $("#c_subname");
 
-        $.each(category[value], function() {
-            $("<option />")
-            .attr("value", this.cid)
-            .html(this.subname)
-            .appendTo(subselect);
+            subselect.empty();
+            $("<option />").html('').appendTo(subselect);
+
+            $.each(category[value], function() {
+                if (this.subname == c_subname) {
+                    $("<option />")
+                    .attr("value", this.cid)
+                    .attr("selected", '')
+                    .html(this.subname)
+                    .appendTo(subselect);
+                } else {
+                    $("<option />")
+                    .attr("value", this.cid)
+                    .html(this.subname)
+                    .appendTo(subselect);
+                }
+            });
+        }
+    
+        $("#c_name").change(function() {
+            var value = $(this).val();
+            var subselect = $("#c_subname");
+
+            subselect.empty();
+            $("<option />").html('').appendTo(subselect);
+
+            $.each(category[value], function() {
+                $("<option />")
+                .attr("value", this.cid)
+                .html(this.subname)
+                .appendTo(subselect);
+            });
         });
     });
 
