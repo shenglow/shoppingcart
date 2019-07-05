@@ -26,4 +26,19 @@ class Category extends Model
      * @var array
      */
     protected $fillable = ['name', 'subname', 'show_popular'];
+
+    /**
+     * The attributes that should be hidden for arrays.
+     *
+     * @var array
+     */
+    protected $hidden = ['created_at', 'updated_at'];
+
+    /**
+     * Get all of the products of the category.
+     */
+    public function products()
+    {
+        return $this->hasMany('App\Models\Product', 'cid', 'cid');
+    }
 }
