@@ -33,6 +33,8 @@ class ProductController extends Controller
     /**
      * Display a listing of the resource.
      *
+     * @param  string  $c_name
+     * @param  string  $c_subname
      * @return \Illuminate\Http\Response
      */
     public function index($c_name = '', $c_subname = '')
@@ -54,8 +56,8 @@ class ProductController extends Controller
         $products = Category::with('products')->where($arr_where)->get();
 
         return view('back.product', [
-            'user' => $this->user, 
-            'categories' => $arr_categories, 
+            'user' => $this->user,
+            'categories' => $arr_categories,
             'products' => $products,
             'c_name' => $c_name,
             'c_subname' => $c_subname
@@ -71,7 +73,6 @@ class ProductController extends Controller
     {
         $categories = Category::all();
         $arr_categories = array();
-
         foreach($categories as $category) {
             $arr_categories[$category->name][] = array(
                 'cid' => $category->cid,
@@ -109,7 +110,6 @@ class ProductController extends Controller
             'c_subname.integer' => '子類別 內容有誤',
             'description.required' => '簡述 為必填欄位',
             'image.required' => '照片 最少須一張',
-
         ];
 
         $validator = Validator::make($request->all(), $rules, $messages);
@@ -199,7 +199,32 @@ class ProductController extends Controller
      */
     public function edit(Product $product)
     {
-        //
+        $product = Product::with('category')->find($product->pid);
+
+        $categories = Category::all();
+        $arr_categories = array();
+        foreach($categories as $category) {
+            if ($category->cid == $product->cid) {
+                $c_name = $category->name;
+                $c_subname = $category->subname;
+            }
+            $arr_categories[$category->name][] = array(
+                'cid' => $category->cid,
+                'subname' => $category->subname,
+            );
+        }
+
+        $specification = Product::find($product->pid)->specification;
+
+        return view('back.product-edit', [
+            'user' => $this->user,
+            'product' => $product,
+            'categories' => $arr_categories,
+            'c_name' => $c_name,
+            'c_subname' => $c_subname,
+            'specification' => $specification,
+            'images' => explode(',', $product->image)
+        ]);
     }
 
     /**
@@ -211,7 +236,78 @@ class ProductController extends Controller
      */
     public function update(Request $request, Product $product)
     {
-        //
+        $rules = [
+            'name' => 'required',
+            'price' => 'required|integer',
+            'c_name' => 'required',
+            'c_subname' => 'required|integer',
+            'description' => 'required',
+            // 'image' => 'required',
+            // 'image.*' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+        ];
+
+        $messages = [
+            'name.required' => '名稱 為必填欄位',
+            'price.required' => '價格 為必填欄位',
+            'price.integer' => '價格 必須為整數',
+            'c_name.required' => '類別 為必選欄位',
+            'c_subname.required' => '子類別 為必選欄位',
+            'c_subname.integer' => '子類別 內容有誤',
+            'description.required' => '簡述 為必填欄位',
+            // 'image.required' => '照片 最少須一張',
+        ];
+
+        $validator = Validator::make($request->all(), $rules, $messages);
+
+        if ($validator->fails()) {
+
+            $str_content = '';
+            foreach ($validator->errors()->all() as $message) {
+                $str_content .= (empty($str_content)) ? $message : ' , '.$message;
+            }
+
+            $msg = array('content' => '新增失敗: '.$str_content, 'type' => 'alert-danger');
+
+            Session::flash('msg', $msg);
+            return redirect()->route('admin.product.edit', $product->pid)->withInput();
+        }
+
+        $product = Product::find($product->pid);
+
+        $product->name = $request->input('name');
+        $product->price = $request->input('price');
+        $product->cid = $request->input('c_subname');
+        $product->description = $request->input('description');
+        $product->detail = $request->input('detail');
+
+        $product->save();
+
+        foreach ($request->input('specification') as $key => $value) {
+            $specification = '';
+            $quantity = 0;
+            if (!empty($value)) {
+                $specification = $value;
+                if (isset($request->input('quantity')[$key])) {
+                    $quantity = $request->input('quantity')[$key];
+                }
+            }
+            
+            $productSpecification = productSpecification::where('psid', $key)->where('pid', $product->pid)->first();
+            if ($productSpecification === null) {
+                $productSpecification = new ProductSpecification;
+            }
+            
+            $productSpecification->pid = $product->pid;
+            $productSpecification->specification = $specification;
+            $productSpecification->quantity = $quantity;
+
+            $productSpecification->save();
+        }
+        
+        $msg = array('content' => '新增成功', 'type' => 'alert-success');
+
+        Session::flash('msg', $msg);
+        return redirect()->route('admin.product.index');
     }
 
     /**

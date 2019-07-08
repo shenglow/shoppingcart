@@ -26,4 +26,20 @@ class Product extends Model
      * @var array
      */
     protected $hidden = ['created_at', 'updated_at'];
+
+    /**
+     * Get the category record associated with the product.
+     */
+    public function category()
+    {
+        return $this->hasOne('App\Models\Category', 'cid', 'cid');
+    }
+
+    /**
+     * Get the spec of the product.
+     */
+    public function specification()
+    {
+        return $this->hasMany('App\Models\ProductSpecification', 'pid', 'pid');
+    }
 }

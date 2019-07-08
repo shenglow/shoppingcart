@@ -12,4 +12,18 @@ class ProductSpecification extends Model
      * @var string
      */
     protected $table = 'product_specification';
+
+    /**
+     * The primary key associated with the table.
+     *
+     * @var integer
+     */
+    protected $primaryKey = 'psid';
+
+    /**
+     * The attributes that should be hidden for arrays.
+     *
+     * @var array
+     */
+    protected $hidden = ['created_at', 'updated_at'];
 }
