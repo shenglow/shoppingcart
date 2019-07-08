@@ -38,7 +38,7 @@
 
 <!-- Nav Item - Charts -->
 <li class="nav-item @yield('nav_product')">
-    <a class="nav-link" href="products.html">
+    <a class="nav-link" href="{{ route('admin.product.index') }}">
         <i class="fas fa-fw fa-archive"></i>
         <span>商品管理</span>
     </a>

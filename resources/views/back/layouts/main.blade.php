@@ -82,6 +82,8 @@
 
     <!-- Page level plugins -->
     <script src="{{ asset('back/vendor/chart.js/Chart.min.js') }}"></script>
+
+    @yield('custom_script')
 </body>
 
 </html>
