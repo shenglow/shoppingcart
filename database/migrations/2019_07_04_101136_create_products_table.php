@@ -22,6 +22,7 @@ class CreateProductsTable extends Migration
             $table->text('detail')->nullable();
             $table->string('path', 100);
             $table->text('image');
+            $table->boolean('is_enable')->default(false);
             $table->timestamps();
         });
     }

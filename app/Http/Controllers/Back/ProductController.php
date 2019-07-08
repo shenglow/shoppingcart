@@ -320,4 +320,22 @@ class ProductController extends Controller
     {
         //
     }
+
+    /**
+     * Change product status.
+     *
+     * @param  int  $pid
+     * @param  bool $status
+     * @return \Illuminate\Http\Response
+     */
+    public function changeStatus($pid, $status)
+    {
+        $product = Product::find($pid);
+        if ($product !== null) {
+            $product->is_enable = $status;
+            $product->save();
+        }
+
+        return redirect()->back();
+    }
 }

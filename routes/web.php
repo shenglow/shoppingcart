@@ -32,6 +32,7 @@ Route::middleware(['auth:admin'])->prefix('admin')->name('admin.')->group(functi
     Route::resource('/category', 'Back\CategoryController', ['except' => ['show']]);
 
     // modify product page
-    Route::resource('/product', 'Back\ProductController', ['except' => ['show']]);
+    Route::resource('/product', 'Back\ProductController', ['except' => ['show', 'destroy']]);
     Route::get('/product/{c_name?}/{c_subname?}', 'Back\ProductController@index')->name('product.search');
+    Route::get('/product/changestatus/{pid}/{status}', 'Back\ProductController@changeStatus')->name('product.changestatus');
 });

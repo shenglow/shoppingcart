@@ -84,12 +84,15 @@
                                         <a href="{{ route('admin.product.edit', $product->pid) }}" class="btn btn-primary">
                                             <span class="text">編輯</span>
                                         </a>
-                                        <a href="{{ route('admin.product.destroy', $product->pid) }}" class="btn btn-danger">
-                                            <span class="text">刪除</span>
-                                        </a>
-                                        <a href="#" class="btn btn-danger">
-                                            <span class="text">下架</span>
-                                        </a>
+                                        @if ($product->is_enable)
+                                            <a href="{{ route('admin.product.changestatus', [$product->pid, 0]) }}" class="btn btn-danger">
+                                                <span class="text">下架</span>
+                                            </a>
+                                        @else
+                                            <a href="{{ route('admin.product.changestatus', [$product->pid, !$product->is_enable]) }}" class="btn btn-success">
+                                                <span class="text">上架</span>
+                                            </a>
+                                        @endif
                                     </td>
                                 </tr>
                             @endforeach
