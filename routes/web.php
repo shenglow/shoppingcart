@@ -11,9 +11,7 @@
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', 'Front\WebsiteController@index');
 
 Route::get('/admin/login', 'Back\AccountController@showAdminLoginForm');
 
