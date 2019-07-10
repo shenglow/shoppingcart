@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Front;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 
 class WebsiteController extends Controller
 {
@@ -12,6 +13,8 @@ class WebsiteController extends Controller
      */
     public function index()
     {
-        return view('front.index');
+        $user = Auth::user();
+
+        return view('front.index', ['user' => $user]);
     }
 }

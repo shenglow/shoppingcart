@@ -17,6 +17,12 @@ Route::post('/login', 'Front\AccountController@userLogin')->name('login');
 Route::get('/register', 'Front\AccountController@showUserRegisterForm');
 Route::post('/register', 'Front\AccountController@userRegister')->name('register');
 
+// use auth middleware to authenticate user
+Route::middleware(['auth:web'])->group(function () {
+    // logout
+    Route::get('/logout', 'Front\AccountController@logout');
+});
+
 Route::get('/admin/login', 'Back\AccountController@showAdminLoginForm');
 Route::post('/admin/login', 'Back\AccountController@adminLogin')->name('admin.login');
 

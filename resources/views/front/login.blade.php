@@ -12,17 +12,22 @@
                 <div class="text-center">
                     <h1 class="margin-bottom-20">歡迎光臨!</h1>
                 </div>
+                @if (session('msg'))
+                    <div class="alert {{ session()->get('msg')['type'] }}" role="alert">
+                        {{ session()->get('msg')['content'] }}
+                    </div>
+                @endif
                 <form method="POST" action="{{ route('login') }}">
                     {{ csrf_field() }}
                     <div class="form-group">
-                        <input type="username" class="form-control br-10" name="username" placeholder="Username">
+                        <input type="username" class="form-control br-10" name="username" placeholder="Username" value="{{ old('username') }}">
                     </div>
                     <div class="form-group">
                         <input type="password" class="form-control br-10" name="password" placeholder="Password">
                     </div>
                     <div class="form-group">
                         <div class="small">
-                            <input type="checkbox" id="customCheck">
+                            <input type="checkbox" name="remember">
                             <label for="customCheck">Remember Me</label>
                         </div>
                     </div>

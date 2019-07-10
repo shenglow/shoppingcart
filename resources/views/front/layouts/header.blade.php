@@ -5,7 +5,12 @@
             <!-- BEGIN TOP BAR MENU -->
             <div class="col-md-12 col-sm-12 additional-nav">
                 <ul class="list-unstyled list-inline pull-right">
-                    <li><a href="{{ url('login') }}">登入</a></li>
+                    @if (isset($user))
+                        <li>{{ $user->username }}</li>
+                        <li><a href="{{ url('logout') }}">登出</a></li>
+                    @else
+                        <li><a href="{{ url('login') }}">登入</a></li>
+                    @endif
                     <li><a href="#">會員中心</a></li>
                     <li><a href="#">追蹤清單</a></li>
                     <li><a href="#">結帳</a></li>

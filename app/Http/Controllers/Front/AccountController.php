@@ -61,7 +61,36 @@ class AccountController extends Controller
      */
     public function userLogin(Request $request)
     {
-        return view('front.index');
+        $arr_msg = array();
+
+        $rules = [
+            'username' => 'required',
+            'password' => 'required',
+        ];
+
+        $messages = [
+            'username.required' => 'username 為必填欄位',
+            'password.required' => 'password 為必填欄位',
+        ];
+
+        $validator = Validator::make($request->all(), $rules, $messages);
+
+        if ($validator->fails()) {
+            $str_content = '';
+            foreach ($validator->errors()->all() as $message) {
+                $arr_msg[] = $message;
+            }
+        } else {
+            if (Auth::guard('web')->attempt(['username' => $request->username, 'password' => $request->password], $request->get('remember'))) {
+                return redirect('/');
+            }
+
+            $arr_msg[] = '使用者名稱或密碼錯誤';
+        }
+
+        $msg = array('content' => '登入失敗: '.implode(',', $arr_msg), 'type' => 'alert-danger');
+        Session::flash('msg', $msg);
+        return back()->withInput($request->only('username', 'remember'));
     }
 
     /**
@@ -109,7 +138,7 @@ class AccountController extends Controller
         } else {
             $user = User::firstOrCreate(
                 ['username' => $request->input('username'), 'email' => $request->input('email')],
-                ['password' => $request->input('password')]
+                ['password' => bcrypt($request->input('password'))]
             );
 
             if (!$user->wasRecentlyCreated) {
