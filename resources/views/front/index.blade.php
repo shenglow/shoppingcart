@@ -102,7 +102,7 @@
             <div class="col-md-12 sale-product">
                 <h2>最新商品</h2>
                 <div class="owl-carousel owl-carousel5">
-                    @foreach($products as $key => $product)
+                    @foreach($new_products as $key => $product)
                         @php
                             $arr_img = explode(',', $product->image);
                         @endphp
@@ -125,9 +125,9 @@
             <!-- END SALE PRODUCT -->
         </div>
         <!-- END SALE PRODUCT & NEW ARRIVALS -->
+
+        @include('front/layouts/navbar')
     </div>
 </div>
-
-@include('front/layouts/navbar')
 
 @endsection
