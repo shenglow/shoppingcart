@@ -21,6 +21,11 @@ class WebsiteController extends Controller
 
         $categories = Category::all();
         $arr_categories = array();
+        
+        $popular_products = Category::with('products')->where('show_popular', true)->get()->map(function($category) {
+            $category->setRelation('products', $category->products->sortByDesc('created_at')->take(3));
+            return $category;
+        });
 
         foreach($categories as $category) {
             $arr_categories[$category->name][] = array(
@@ -29,6 +34,11 @@ class WebsiteController extends Controller
             );
         }
 
-        return view('front.index', ['user' => $user, 'new_products' => $new_products, 'categories' => $arr_categories,]);
+        return view('front.index', [
+            'user' => $user,
+            'new_products' => $new_products,
+            'categories' => $arr_categories,
+            'popular_products' => $popular_products
+        ]);
     }
 }
