@@ -1,6 +1,6 @@
 @extends('front.layouts.main')
 
-@section('title', 'Shop Admin')
+@section('title', 'Shop UI')
 
 @section('content')
 <div>
