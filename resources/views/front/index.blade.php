@@ -147,7 +147,7 @@
                                 </div>
                             </div>
                             <h3><a href="#">{{ $product->name }}</a></h3>
-                            <div class="pi-price">{{ number_format($product->price) }}</div>
+                            <div class="pi-price">${{ number_format($product->price) }}</div>
                             <a href="javascript:;" class="btn btn-default add2cart">Add to cart</a>
                         </div>
                     @endforeach

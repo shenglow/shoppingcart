@@ -9,11 +9,14 @@
                 </a>
                 <ul class="dropdown-menu">
                     @foreach ($category as $subcategory)
-                        <li><a href="#"><i class="fa fa-angle-right"></i> {{ $subcategory['subname'] }}</a></li>
+                        <li><a href="{{ url('product-lists', $subcategory['cid']) }}"><i class="fa fa-angle-right"></i> {{ $subcategory['subname'] }}</a></li>
                     @endforeach
                 </ul>
             </li>
         @endforeach
     </ul>
+
+    @yield('navbar-popular')
+
 </div>
 <!-- END SIDEBAR -->
