@@ -16,7 +16,7 @@
             <div class="col-md-9 col-sm-7">
                 <div class="row list-view-sorting clearfix">
                     <form method="GET" action="{{ url('product-lists', $cid) }}">
-                        <div class="col-md-10 col-sm-10">
+                        <div class="col-sm-12">
                             <div class="pull-right">
                                 <label class="control-label">Show:</label>
                                 <select class="form-control input-sm" id="page">
@@ -29,16 +29,12 @@
                             </div>
                             <div class="pull-right">
                                 <label class="control-label">Sort&nbsp;By:</label>
-                                <select class="form-control input-sm">
-                                    <option value="#?sort=p.sort_order&amp;order=ASC" selected="selected">Default</option>
-                                    <option value="#?sort=pd.name&amp;order=ASC">Name (A - Z)</option>
-                                    <option value="#?sort=pd.name&amp;order=DESC">Name (Z - A)</option>
-                                    <option value="#?sort=p.price&amp;order=ASC">Price (Low &gt; High)</option>
-                                    <option value="#?sort=p.price&amp;order=DESC">Price (High &gt; Low)</option>
-                                    <option value="#?sort=rating&amp;order=DESC">Rating (Highest)</option>
-                                    <option value="#?sort=rating&amp;order=ASC">Rating (Lowest)</option>
-                                    <option value="#?sort=p.model&amp;order=ASC">Model (A - Z)</option>
-                                    <option value="#?sort=p.model&amp;order=DESC">Model (Z - A)</option>
+                                <select class="form-control input-sm" id="order">
+                                    <option value="default" selected="selected">預設排序</option>
+                                    <option value="name-asc">名稱 (小 - 大)</option>
+                                    <option value="name-desc">名稱 (大 - 小)</option>
+                                    <option value="price-asc">價格 (低 &gt; 高)</option>
+                                    <option value="price-desc">價格 (高 &gt; 低)</option>
                                 </select>
                             </div>
                         </div>
@@ -106,10 +102,20 @@
 
 @section('custom_script')
 $('#page').on('change', function(e){
-    var select = $(this);
-    var form = select.closest('form');
-    var action = select.closest('form').attr('action');
-    form.attr('action', action + '/' + select.val());
+    var page = $(this);
+    var order = $('#order');
+    var form = page.closest('form');
+    var action = page.closest('form').attr('action');
+    form.attr('action', action + '/order/' + order.val() + '/perpage/' + page.val());
+    form.submit();
+});
+
+$('#order').on('change', function(e){
+    var page = $('#page');
+    var order = $(this);
+    var form = order.closest('form');
+    var action = order.closest('form').attr('action');
+    form.attr('action', action + '/order/' + order.val() + '/perpage/' + page.val());
     form.submit();
 });
 @endsection

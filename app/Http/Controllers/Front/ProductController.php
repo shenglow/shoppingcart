@@ -13,7 +13,7 @@ class ProductController extends Controller
     /**
      * Show index page
      */
-    public function index($cid, $perpage = 10)
+    public function index($cid, $order = 'default', $perpage = 10)
     {
         $user = Auth::user();
 
@@ -36,7 +36,30 @@ class ProductController extends Controller
                 return $category;
         });
 
-        $products = Product::where('cid', $cid)->paginate($perpage);
+        $arr_order = array();
+        switch ($order) {
+            case 'name-asc':
+                $arr_order['name'] = 'asc';
+                break;
+            case 'name-desc':
+                $arr_order['name'] = 'desc';
+                break;
+            case 'price-asc':
+                $arr_order['price'] = 'asc';
+                break;
+            case 'price-desc':
+                $arr_order['price'] = 'desc';
+                break;
+            default:
+                $arr_order['created_at'] = 'desc';
+                break;
+        }
+
+        $query = Product::where('cid', $cid);
+        foreach ($arr_order as $key => $value) {
+            $query->orderBy($key, $value);
+        }
+        $products = $query->paginate($perpage);
 
         return view('front.product-lists', [
             'user' => $user,

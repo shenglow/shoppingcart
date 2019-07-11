@@ -17,7 +17,8 @@ Route::post('/login', 'Front\AccountController@userLogin')->name('login');
 Route::get('/register', 'Front\AccountController@showUserRegisterForm');
 Route::post('/register', 'Front\AccountController@userRegister')->name('register');
 
-Route::get('/product-lists/{cid}/{perpage?}', 'Front\ProductController@index');
+Route::get('/product-lists/{cid}', 'Front\ProductController@index');
+Route::get('/product-lists/{cid}/order/{order?}/perpage/{perpage?}', 'Front\ProductController@index');
 
 // use auth middleware to authenticate user
 Route::middleware(['auth:web'])->group(function () {
