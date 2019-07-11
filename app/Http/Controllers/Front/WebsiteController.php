@@ -28,7 +28,7 @@ class WebsiteController extends Controller
         });
 
         foreach($categories as $category) {
-            $arr_categories[$category->name][] = array(
+            $arr_categories[$category->name]['subcategory'][] = array(
                 'cid' => $category->cid,
                 'subname' => $category->subname
             );

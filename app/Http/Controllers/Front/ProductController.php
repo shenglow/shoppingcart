@@ -21,11 +21,14 @@ class ProductController extends Controller
         $arr_categories = array();
 
         foreach($categories as $category) {
-            $arr_categories[$category->name][] = array(
+            if ($category->cid == $cid) $arr_categories[$category->name]['cid'] = $cid;
+            $arr_categories[$category->name]['subcategory'][] = array(
                 'cid' => $category->cid,
                 'subname' => $category->subname
             );
         }
+
+        //dd($arr_categories);
 
         $popular_products = Category::with('products')
             ->where('show_popular', true)
