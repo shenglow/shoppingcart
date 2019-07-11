@@ -56,7 +56,7 @@
                                     <a href="#product-pop-up" class="btn btn-default fancybox-fast-view">View</a>
                                 </div>
                             </div>
-                            <h3><a href="#">{{ $product->name }}</a></h3>
+                            <h3><a href="{{ url('product', [$product->cid, $product->pid]) }}">{{ $product->name }}</a></h3>
                             <div class="pi-price">${{ number_format($product->price) }}</div>
                             <a href="javascript:;" class="btn btn-default add2cart">Add to cart</a>
                         </div>
@@ -101,21 +101,42 @@
 @endsection
 
 @section('custom_script')
-$('#page').on('change', function(e){
-    var page = $(this);
-    var order = $('#order');
-    var form = page.closest('form');
-    var action = page.closest('form').attr('action');
-    form.attr('action', action + '/order/' + order.val() + '/perpage/' + page.val());
-    form.submit();
-});
+<!-- BEGIN PAGE LEVEL JAVASCRIPTS (REQUIRED ONLY FOR CURRENT PAGE) -->
+<script src="{{ asset('front/plugins/fancybox/source/jquery.fancybox.pack.js') }}" type="text/javascript"></script><!-- pop up -->
+<script src="{{ asset('front/plugins/owl.carousel/owl.carousel.min.js') }}" type="text/javascript"></script>
+<!-- slider for products -->
+<script src="{{ asset('front/plugins/zoom/jquery.zoom.min.js') }}" type="text/javascript"></script><!-- product zoom -->
+<script src="{{ asset('front/plugins/bootstrap-touchspin/bootstrap.touchspin.js') }}" type="text/javascript"></script>
+<!-- Quantity -->
 
-$('#order').on('change', function(e){
-    var page = $('#page');
-    var order = $(this);
-    var form = order.closest('form');
-    var action = order.closest('form').attr('action');
-    form.attr('action', action + '/order/' + order.val() + '/perpage/' + page.val());
-    form.submit();
-});
+<script src="{{ asset('front/corporate/scripts/layout.js') }}" type="text/javascript"></script>
+<script src="{{ asset('front/pages/scripts/bs-carousel.js') }}" type="text/javascript"></script>
+<script type="text/javascript">
+    jQuery(document).ready(function () {
+        Layout.init();
+        Layout.initOWL();
+        Layout.initImageZoom();
+        Layout.initTouchspin();
+        Layout.initTwitter();
+
+        $('#page').on('change', function(e){
+            var page = $(this);
+            var order = $('#order');
+            var form = page.closest('form');
+            var action = page.closest('form').attr('action');
+            form.attr('action', action + '/order/' + order.val() + '/perpage/' + page.val());
+            form.submit();
+        });
+
+        $('#order').on('change', function(e){
+            var page = $('#page');
+            var order = $(this);
+            var form = order.closest('form');
+            var action = order.closest('form').attr('action');
+            form.attr('action', action + '/order/' + order.val() + '/perpage/' + page.val());
+            form.submit();
+        });
+    });
+</script>
+<!-- END PAGE LEVEL JAVASCRIPTS -->
 @endsection
