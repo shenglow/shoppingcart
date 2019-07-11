@@ -25,7 +25,7 @@
 <!-- BEGIN HEADER -->
 <div class="header">
     <div class="container">
-        <a class="site-logo" href="#"><img src="{{ asset('front/corporate/img/logos/logo-shop-red.png') }}" alt="Shop UI"></a>
+        <a class="site-logo" href="{{ url('/') }}"><img src="{{ asset('front/corporate/img/logos/logo-shop-red.png') }}" alt="Shop UI"></a>
 
         <!-- BEGIN CART -->
         <div class="top-cart-block">

@@ -85,6 +85,8 @@
             Layout.initImageZoom();
             Layout.initTouchspin();
             Layout.initTwitter();
+
+            @yield('custom_script')
         });
     </script>
     <!-- END PAGE LEVEL JAVASCRIPTS -->
