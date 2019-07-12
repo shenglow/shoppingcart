@@ -7,7 +7,7 @@
             @endphp
             <div class="item">
                 <a href="#"><img src="{{ asset($product->path.'/'.$arr_img[0]) }}" alt="{{ $product->name }}"></a>
-                <h3><a href="#">{{ $product->name }}</a></h3>
+                <h3><a href="{{ url('product', [$product->cid, $product->pid]) }}">{{ $product->name }}</a></h3>
                 <div class="price">${{ number_format($product->price) }}</div>
             </div>
         @endforeach
