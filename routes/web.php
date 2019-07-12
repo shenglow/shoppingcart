@@ -20,6 +20,8 @@ Route::post('/register', 'Front\AccountController@userRegister')->name('register
 Route::get('/product-lists/{cid}', 'Front\ProductController@index');
 Route::get('/product-lists/{cid}/order/{order?}/perpage/{perpage?}', 'Front\ProductController@index');
 
+Route::get('/product/{cid}/{pid}', 'Front\ProductController@showProduct');
+
 // use auth middleware to authenticate user
 Route::middleware(['auth:web'])->group(function () {
     // logout

@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Product;
+use App\Models\ProductSpecification;
 use App\Models\Category;
 
 class ProductController extends Controller
@@ -27,8 +28,6 @@ class ProductController extends Controller
                 'subname' => $category->subname
             );
         }
-
-        //dd($arr_categories);
 
         $popular_products = Category::with('products')
             ->where('show_popular', true)
@@ -70,6 +69,47 @@ class ProductController extends Controller
             'popular_products' => $popular_products,
             'cid' => $cid,
             'products' => $products
+        ]);
+    }
+
+    /**
+     * Show product page
+     */
+    public function showProduct($cid, $pid)
+    {
+        $user = Auth::user();
+
+        $categories = Category::all();
+        $arr_categories = array();
+
+        foreach($categories as $category) {
+            if ($category->cid == $cid) $arr_categories[$category->name]['cid'] = $cid;
+            $arr_categories[$category->name]['subcategory'][] = array(
+                'cid' => $category->cid,
+                'subname' => $category->subname
+            );
+        }
+
+        $popular_products = Category::with('products')
+            ->where('show_popular', true)
+            ->where('cid', $cid)
+            ->get()
+            ->map(function($category) {
+                $category->setRelation('products', $category->products->sortByDesc('created_at')->take(3));
+                return $category;
+        });
+
+        $product = Product::find($pid);
+
+        $specification = Product::find($pid)->specification;
+
+        return view('front.product', [
+            'user' => $user,
+            'categories' => $arr_categories,
+            'popular_products' => $popular_products,
+            'cid' => $cid,
+            'product' => $product,
+            'specification' => $specification
         ]);
     }
 }
