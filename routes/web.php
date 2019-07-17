@@ -26,6 +26,9 @@ Route::get('/product/{cid}/{pid}', 'Front\ProductController@showProduct');
 Route::middleware(['auth:web'])->group(function () {
     // logout
     Route::get('/logout', 'Front\AccountController@logout');
+
+    // add review
+    Route::post('/product/review/{pid}', 'Front\ProductController@addReview')->name('product.review');
 });
 
 Route::get('/admin/login', 'Back\AccountController@showAdminLoginForm');

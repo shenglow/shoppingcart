@@ -19,7 +19,7 @@
     <meta property="og:image" content="-CUSTOMER VALUE-"><!-- link to image for socio -->
     <meta property="og:url" content="-CUSTOMER VALUE-">
 
-    <link rel="shortcut icon" href="favicon.ico">
+    <link rel="shortcut icon" href="{{ asset('front/pages/img/favicon.png') }}">
 
     <!-- Fonts START -->
     <link href="http://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700|PT+Sans+Narrow|Source+Sans+Pro:200,300,400,600,700,900&amp;subset=all" rel="stylesheet" type="text/css">
@@ -32,21 +32,7 @@
     <link href="{{ asset('front/plugins/bootstrap/css/bootstrap.min.css') }}" rel="stylesheet" type="text/css">
     <!-- Global styles END -->
 
-    <!-- Page level plugin styles START -->
-    <link href="{{ asset('front/pages/css/animate.css') }}" rel="stylesheet" type="text/css">
-    <link href="{{ asset('front/plugins/fancybox/source/jquery.fancybox.css') }}" rel="stylesheet" type="text/css">
-    <link href="{{ asset('front/plugins/owl.carousel/assets/owl.carousel.css') }}" rel="stylesheet" type="text/css">
-    <!-- Page level plugin styles END -->
-
-    <!-- Theme styles START -->
-    <link href="{{ asset('front/pages/css/components.css') }}" rel="stylesheet" type="text/css">
-    <link href="{{ asset('front/pages/css/slider.css') }}" rel="stylesheet" type="text/css">
-    <link href="{{ asset('front/pages/css/style-shop.css') }}" rel="stylesheet" type="text/css">
-    <link href="{{ asset('front/corporate/css/style.css') }}" rel="stylesheet" type="text/css">
-    <link href="{{ asset('front/corporate/css/style-responsive.css') }}" rel="stylesheet" type="text/css">
-    <link href="{{ asset('front/corporate/css/themes/red.css') }}" rel="stylesheet" type="text/css" id="style-color">
-    <link href="{{ asset('front/corporate/css/custom.css') }}" rel="stylesheet" type="text/css">
-    <!-- Theme styles END -->
+    @yield('custom_css')
 </head>
 <!-- Head END -->
 
@@ -66,6 +52,7 @@
     <script src="{{ asset('front/plugins/bootstrap/js/bootstrap.min.js') }}" type="text/javascript"></script>
     <script src="{{ asset('front/corporate/scripts/back-to-top.js') }}" type="text/javascript"></script>
     <script src="{{ asset('front/plugins/jquery-slimscroll/jquery.slimscroll.min.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('front/pages/scripts/custom.js') }}" type="text/javascript"></script>
     <!-- END CORE PLUGINS -->
 
     @yield('custom_script')

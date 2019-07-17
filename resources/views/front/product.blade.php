@@ -2,6 +2,25 @@
 
 @section('title', 'Shop UI')
 
+@section('custom_css')
+<!-- Page level plugin styles START -->
+<link href="{{ asset('front/plugins/fancybox/source/jquery.fancybox.css') }}" rel="stylesheet">
+<link href="{{ asset('front/plugins/owl.carousel/assets/owl.carousel.css') }}" rel="stylesheet">
+<link href="{{ asset('front/plugins/uniform/css/uniform.default.css') }}" rel="stylesheet" type="text/css">
+<link href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css" rel="stylesheet" type="text/css"><!-- for slider-range -->
+<link href="{{ asset('front/plugins/rateit/src/rateit.css" rel="stylesheet') }}" type="text/css">
+<!-- Page level plugin styles END -->
+
+<!-- Theme styles START -->
+<link href="{{ asset('front/pages/css/components.css') }}" rel="stylesheet">
+<link href="{{ asset('front/corporate/css/style.css') }}" rel="stylesheet">
+<link href="{{ asset('front/pages/css/style-shop.css') }}" rel="stylesheet" type="text/css">
+<link href="{{ asset('front/corporate/css/style-responsive.css') }}" rel="stylesheet">
+<link href="{{ asset('front/corporate/css/themes/red.css') }}" rel="stylesheet" id="style-color">
+<link href="{{ asset('front/corporate/css/custom.css') }}" rel="stylesheet">
+<!-- Theme styles END -->
+@endsection
+
 @section('navbar-popular')
     @include('front/layouts/navbar-popular')
 @endsection
@@ -66,86 +85,30 @@
                                     <button class="btn btn-primary" type="button">Add to wishlist</button>
                                 </div>
                             @endif
-                            <div class="review">
-                                <input type="range" value="4" step="0.25" id="backing4">
-                                <div class="rateit" data-rateit-backingfld="#backing4" data-rateit-resetable="false"  data-rateit-ispreset="true" data-rateit-min="0" data-rateit-max="5">
-                                </div>
-                                <a href="javascript:;">7 reviews</a>&nbsp;&nbsp;|&nbsp;&nbsp;<a href="javascript:;">Write a review</a>
-                            </div>
                         </div>
 
                         <div class="product-page-content">
-                            <ul id="myTab" class="nav nav-tabs">
-                                <li><a href="#Description" data-toggle="tab">Description</a></li>
-                                <li class="active"><a href="#Reviews" data-toggle="tab">Reviews (1)</a></li>
+                            <ul class="nav nav-tabs">
+                                <li><a href="#Description" data-toggle="tab">描述</a></li>
+                                <li class="active"><a href="#Reviews" data-toggle="tab">評論</a></li>
                             </ul>
                             <div id="myTabContent" class="tab-content">
                                 <div class="tab-pane fade" id="Description">
                                     <p>{!! nl2br($product->detail) !!}</p>
                                 </div>
-                                <div class="tab-pane fade" id="Information">
-                                    <table class="datasheet">
-                                        <tr>
-                                            <th colspan="2">Additional features</th>
-                                        </tr>
-                                        <tr>
-                                            <td class="datasheet-features-type">Value 1</td>
-                                            <td>21 cm</td>
-                                        </tr>
-                                        <tr>
-                                            <td class="datasheet-features-type">Value 2</td>
-                                            <td>700 gr.</td>
-                                        </tr>
-                                        <tr>
-                                            <td class="datasheet-features-type">Value 3</td>
-                                            <td>10 person</td>
-                                        </tr>
-                                        <tr>
-                                            <td class="datasheet-features-type">Value 4</td>
-                                            <td>14 cm</td>
-                                        </tr>
-                                        <tr>
-                                            <td class="datasheet-features-type">Value 5</td>
-                                            <td>plastic</td>
-                                        </tr>
-                                    </table>
-                                </div>
                                 <div class="tab-pane fade in active" id="Reviews">
-                                    <!--<p>There are no reviews for this product.</p>-->
-                                    <div class="review-item clearfix">
-                                        <div class="review-item-submitted">
-                                            <strong>Bob</strong>
-                                            <em>30/12/2013 - 07:37</em>
-                                            <div class="rateit" data-rateit-value="5" data-rateit-ispreset="true" data-rateit-readonly="true"></div>
-                                        </div>                                              
-                                        <div class="review-item-content">
-                                            <p>Sed velit quam, auctor id semper a, hendrerit eget justo. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Duis vel arcu pulvinar dolor tempus feugiat id in orci. Phasellus sed erat leo. Donec luctus, justo eget ultricies tristique, enim mauris bibendum orci, a sodales lectus purus ut lorem.</p>
-                                        </div>
+                                    <div>
+                                        @include('front/template/review')
                                     </div>
-
                                     <!-- BEGIN FORM-->
-                                    <form action="#" class="reviews-form" role="form">
-                                        <h2>Write a review</h2>
+                                    <form class="reviews-form" role="form" id="reviews-form">
+                                        {{ csrf_field() }}
+                                        <h2>留下評論</h2>
                                         <div class="form-group">
-                                            <label for="name">Name <span class="require">*</span></label>
-                                            <input type="text" class="form-control" id="name">
+                                            <textarea class="form-control" rows="8" name="review"></textarea>
                                         </div>
-                                        <div class="form-group">
-                                            <label for="email">Email</label>
-                                            <input type="text" class="form-control" id="email">
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="review">Review <span class="require">*</span></label>
-                                            <textarea class="form-control" rows="8" id="review"></textarea>
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="email">Rating</label>
-                                            <input type="range" value="4" step="0.25" id="backing5">
-                                        <div class="rateit" data-rateit-backingfld="#backing5" data-rateit-resetable="false"  data-rateit-ispreset="true" data-rateit-min="0" data-rateit-max="5">
-                                        </div>
-                                        </div>
-                                        <div class="padding-top-20">                  
-                                            <button type="submit" class="btn btn-primary">Send</button>
+                                        <div class="padding-top-20">
+                                            <button type="submit" class="btn btn-primary">提交</button>
                                         </div>
                                     </form>
                                     <!-- END FORM--> 
@@ -187,6 +150,23 @@
         });
 
         $("#product-quantity").trigger("touchspin.updatesettings", {max: $("#spec").find(":selected").attr("data-quantity")});
+
+        $('#reviews-form').on('submit', function() {
+            var textarea = $('#reviews-form textarea');
+            var button = $('#reviews-form button');
+
+            button.attr('disabled','true');
+            $.postJSON("{{ route('product.review', $product->pid) }}", $(this).serializeArray(), function(data) {
+                if (data.err == 'false') {
+                    $('#Reviews div:first').html(data.review);
+                    textarea.val('');
+                    button.removeAttr('disabled')
+                } else {
+                    alert(data.err_msg);
+                };
+            })
+            return false;
+        });
     });
 </script>
 <!-- END PAGE LEVEL JAVASCRIPTS -->
