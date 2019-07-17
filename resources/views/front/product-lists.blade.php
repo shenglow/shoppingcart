@@ -2,6 +2,24 @@
 
 @section('title', 'Shop UI')
 
+@section('custom_css')
+<!-- Page level plugin styles START -->
+<link href="{{ asset('front/pages/css/animate.css') }}" rel="stylesheet" type="text/css">
+<link href="{{ asset('front/plugins/fancybox/source/jquery.fancybox.css') }}" rel="stylesheet" type="text/css">
+<link href="{{ asset('front/plugins/owl.carousel/assets/owl.carousel.css') }}" rel="stylesheet" type="text/css">
+<!-- Page level plugin styles END -->
+
+<!-- Theme styles START -->
+<link href="{{ asset('front/pages/css/components.css') }}" rel="stylesheet" type="text/css">
+<link href="{{ asset('front/pages/css/slider.css') }}" rel="stylesheet" type="text/css">
+<link href="{{ asset('front/pages/css/style-shop.css') }}" rel="stylesheet" type="text/css">
+<link href="{{ asset('front/corporate/css/style.css') }}" rel="stylesheet" type="text/css">
+<link href="{{ asset('front/corporate/css/style-responsive.css') }}" rel="stylesheet" type="text/css">
+<link href="{{ asset('front/corporate/css/themes/red.css') }}" rel="stylesheet" type="text/css" id="style-color">
+<link href="{{ asset('front/corporate/css/custom.css') }}" rel="stylesheet" type="text/css">
+<!-- Theme styles END -->
+@endsection
+
 @section('navbar-popular')
     @include('front/layouts/navbar-popular')
 @endsection

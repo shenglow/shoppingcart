@@ -7,7 +7,9 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Product;
 use App\Models\ProductSpecification;
+use App\Models\ProductReview;
 use App\Models\Category;
+use Illuminate\Support\Facades\Validator;
 
 class ProductController extends Controller
 {
@@ -103,13 +105,61 @@ class ProductController extends Controller
 
         $specification = Product::find($pid)->specification;
 
+        $reviews = ProductReview::with('user')->where('pid', $pid)->orderBy('created_at', 'desc')->get();
+        
         return view('front.product', [
             'user' => $user,
             'categories' => $arr_categories,
             'popular_products' => $popular_products,
             'cid' => $cid,
             'product' => $product,
-            'specification' => $specification
+            'specification' => $specification,
+            'reviews' => $reviews
         ]);
+    }
+
+    /**
+     * add a review
+     * 
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int $pid
+     * @return \Illuminate\Http\Response
+     */
+    public function addReview(Request $request, $pid)
+    {
+        $user = Auth::user();
+
+        $rules = [
+            'review' => 'required',
+        ];
+
+        $messages = [
+            'review.required' => '請輸入評論內容',
+        ];
+
+        $validator = Validator::make($request->all(), $rules, $messages);
+
+        $err = 'false';
+        $err_msg = '';
+        $reviews = array();
+        if ($validator->fails()) {
+            $err = 'true';
+            foreach ($validator->errors()->all() as $message) {
+                $err_msg .= (empty($err_msg)) ? $message : ' , '.$message;
+            }
+        } else {
+            $product_review = new ProductReview;
+
+            $product_review->pid = $pid;
+            $product_review->id = $user->id;
+            $product_review->review = $request->input('review');
+
+            $product_review->save();
+
+            $reviews = ProductReview::with('user')->where('pid', $pid)->orderBy('created_at', 'desc')->get();
+            $review_html = view('front.template.review', ['reviews' => $reviews])->render();
+        }
+
+        return array('err' => $err, 'err_msg' => $err_msg, 'review' => $review_html);
     }
 }
