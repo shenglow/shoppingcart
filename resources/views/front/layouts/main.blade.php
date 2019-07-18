@@ -19,6 +19,8 @@
     <meta property="og:image" content="-CUSTOMER VALUE-"><!-- link to image for socio -->
     <meta property="og:url" content="-CUSTOMER VALUE-">
 
+    @yield('extra_meta')
+
     <link rel="shortcut icon" href="{{ asset('front/pages/img/favicon.png') }}">
 
     <!-- Fonts START -->

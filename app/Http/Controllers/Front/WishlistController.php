@@ -30,9 +30,12 @@ class WishlistController extends Controller
             );
         }
 
+        $wishlists = Wishlist::with('product', 'specification')->where('id', '=', $user->id)->get();
+
         return view('front.wishlist', [
             'user' => $user,
-            'categories' => $arr_categories
+            'categories' => $arr_categories,
+            'wishlists' => $wishlists
         ]);
     }
 
@@ -110,11 +113,23 @@ class WishlistController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  int  $pid
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy($pid)
     {
-        //
+        // init return value
+        $err = 'false';
+        $err_msg = '';
+
+        $user = Auth::user();
+
+        $wishlist = Wishlist::where([
+            ['id', '=', $user->id], 
+            ['pid', '=', $pid]
+        ]);
+        $wishlist->delete();
+
+        return array('err' => $err, 'err_msg' => $err_msg);
     }
 }
