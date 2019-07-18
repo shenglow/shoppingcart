@@ -29,6 +29,9 @@ Route::middleware(['auth:web'])->group(function () {
 
     // add review
     Route::post('/product/review/{pid}', 'Front\ProductController@addReview')->name('product.review');
+
+    // wishlist
+    Route::resource('/wishlist', 'Front\WishlistController', ['except' => ['create', 'show', 'edit', 'update']]);
 });
 
 Route::get('/admin/login', 'Back\AccountController@showAdminLoginForm');

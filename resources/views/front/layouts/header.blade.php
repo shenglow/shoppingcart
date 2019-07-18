@@ -12,7 +12,7 @@
                         <li><a href="{{ url('login') }}">登入</a></li>
                     @endif
                     <li><a href="#">會員中心</a></li>
-                    <li><a href="#">追蹤清單</a></li>
+                    <li><a href="{{ route('wishlist.index') }}">追蹤清單</a></li>
                     <li><a href="#">結帳</a></li>
                 </ul>
             </div>

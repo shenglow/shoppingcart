@@ -2,6 +2,11 @@
 
 @section('title', 'Shop UI')
 
+@section('extra_meta')
+<!-- provide the csrf token -->
+<meta name="csrf-token" content="{{ csrf_token() }}" />
+@endsection
+
 @section('custom_css')
 <!-- Page level plugin styles START -->
 <link href="{{ asset('front/plugins/fancybox/source/jquery.fancybox.css') }}" rel="stylesheet">
@@ -77,7 +82,7 @@
                                         <input id="product-quantity" type="text" value="0" readonly class="form-control input-sm">
                                     </div>
                                     <button class="btn btn-primary" type="button">Add to cart</button>
-                                    <button class="btn btn-primary" type="button">Add to wishlist</button>
+                                    <button class="btn btn-primary" type="button" id="add_wishlist" {{ $in_wishlist }}>加入追蹤</button>
                                 </div>
                             @else
                                 <div class="product-page-cart">
@@ -102,7 +107,6 @@
                                     </div>
                                     <!-- BEGIN FORM-->
                                     <form class="reviews-form" role="form" id="reviews-form">
-                                        {{ csrf_field() }}
                                         <h2>留下評論</h2>
                                         <div class="form-group">
                                             <textarea class="form-control" rows="8" name="review"></textarea>
@@ -152,15 +156,28 @@
         $("#product-quantity").trigger("touchspin.updatesettings", {max: $("#spec").find(":selected").attr("data-quantity")});
 
         $('#reviews-form').on('submit', function() {
+            var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
             var textarea = $('#reviews-form textarea');
             var button = $('#reviews-form button');
 
             button.attr('disabled','true');
-            $.postJSON("{{ route('product.review', $product->pid) }}", $(this).serializeArray(), function(data) {
+            $.postJSON("{{ route('product.review', $product->pid) }}", { _token : CSRF_TOKEN, review : textarea.val() }, function(data) {
                 if (data.err == 'false') {
                     $('#Reviews div:first').html(data.review);
                     textarea.val('');
-                    button.removeAttr('disabled')
+                    button.removeAttr('disabled');
+                } else {
+                    alert(data.err_msg);
+                };
+            })
+            return false;
+        });
+
+        $('#add_wishlist').on('click', function() {
+            var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
+            $.postJSON("{{ route('wishlist.store') }}", { _token : CSRF_TOKEN, pid : {{ $product->pid}} }, function(data) {
+                if (data.err == 'false') {
+                    $('#add_wishlist').attr('disabled', 'true');
                 } else {
                     alert(data.err_msg);
                 };
