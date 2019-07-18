@@ -108,11 +108,14 @@ class ProductController extends Controller
 
         $reviews = ProductReview::with('user')->where('pid', $pid)->orderBy('created_at', 'desc')->get();
 
-        $wishlist = Wishlist::where([
-            ['id', '=', $user->id],
-            ['pid', '=', $pid],
-        ])->get();
-        $in_wishlist = (count($wishlist) > 0) ? 'disabled' : '';
+        $in_wishlist = '';
+        if (Auth::check()) {
+            $wishlist = Wishlist::where([
+                ['id', '=', $user->id],
+                ['pid', '=', $pid],
+            ])->get();
+            $in_wishlist = (count($wishlist) > 0) ? 'disabled' : '';
+        }
         
         return view('front.product', [
             'user' => $user,
