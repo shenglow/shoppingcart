@@ -9,6 +9,7 @@ use App\Models\Product;
 use App\Models\ProductSpecification;
 use App\Models\ProductReview;
 use App\Models\Category;
+use App\Models\Wishlist;
 use Illuminate\Support\Facades\Validator;
 
 class ProductController extends Controller
@@ -106,6 +107,12 @@ class ProductController extends Controller
         $specification = Product::find($pid)->specification;
 
         $reviews = ProductReview::with('user')->where('pid', $pid)->orderBy('created_at', 'desc')->get();
+
+        $wishlist = Wishlist::where([
+            ['id', '=', $user->id],
+            ['pid', '=', $pid],
+        ])->get();
+        $in_wishlist = (count($wishlist) > 0) ? 'disabled' : '';
         
         return view('front.product', [
             'user' => $user,
@@ -114,7 +121,8 @@ class ProductController extends Controller
             'cid' => $cid,
             'product' => $product,
             'specification' => $specification,
-            'reviews' => $reviews
+            'reviews' => $reviews,
+            'in_wishlist' => $in_wishlist
         ]);
     }
 
