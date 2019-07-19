@@ -39,6 +39,8 @@ class ShoppingCartController extends Controller
                 $count++;
                 $total += $value['total'];
             }
+        } else {
+            $allCart = array();
         }
         $topCart = array('count' => $count, 'total' => '$'.number_format($total));
 

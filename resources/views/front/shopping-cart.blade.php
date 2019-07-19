@@ -38,7 +38,7 @@
                         <p>您的購物車沒有商品!</p>
                     </div>
                 </div>
-                <div class="goods-page" id="goods-page">
+                <div class="goods-page @if (count($allCart) <= 0) hide @endif"" id="goods-page">
                     <div class="goods-data clearfix">
                         <div class="table-wrapper-responsive">
                             <table summary="Shopping cart">
