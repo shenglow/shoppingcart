@@ -81,7 +81,7 @@
                                     <div class="product-quantity">
                                         <input id="product-quantity" type="text" value="0" readonly class="form-control input-sm">
                                     </div>
-                                    <button class="btn btn-primary" type="button">Add to cart</button>
+                                    <button class="btn btn-primary" type="button" id="add_cart">加入購物車</button>
                                     <button class="btn btn-primary" type="button" id="add_wishlist" {{ $in_wishlist }}>加入追蹤</button>
                                 </div>
                             @else
@@ -166,6 +166,25 @@
                     $('#Reviews div:first').html(data.review);
                     textarea.val('');
                     button.removeAttr('disabled');
+                } else {
+                    alert(data.err_msg);
+                };
+            })
+            return false;
+        });
+
+        $('#add_cart').on('click', function() {
+            var spec = $("#spec").find(":selected").val().split("-");
+            var pid = spec[0];
+            var psid = spec[1];
+            var quantity = $("#product-quantity").val();
+            var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
+            $.postJSON("{{ route('shoppingcart.store') }}", { _token : CSRF_TOKEN, pid : pid, psid : psid, quantity : quantity }, function(data) {
+                if (data.err == 'false') {
+                    if (data.result.length != 0) {
+                        $('#cart-count').text(data.result.count + ' 項商品');
+                        $('#cart-total').text(data.result.total);
+                    }
                 } else {
                     alert(data.err_msg);
                 };

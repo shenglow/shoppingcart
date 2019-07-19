@@ -22,6 +22,9 @@ Route::get('/product-lists/{cid}/order/{order?}/perpage/{perpage?}', 'Front\Prod
 
 Route::get('/product/{cid}/{pid}', 'Front\ProductController@showProduct');
 
+// wishlist
+Route::resource('/shoppingcart', 'Front\ShoppingCartController', ['except' => ['create', 'show', 'edit', 'update']]);
+
 // use auth middleware to authenticate user
 Route::middleware(['auth:web'])->group(function () {
     // logout

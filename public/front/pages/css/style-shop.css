@@ -173,12 +173,6 @@ Header and header elements
 	font-size: 16px;
 }
 
-.top-cart-content-wrapper{
-	position: absolute;
-	right: -2px;
-	top: 100%;
-	z-index: 99999;
-}
 .top-cart-content {
 	padding: 8px 0 10px;
 	background: #fcfafb;
