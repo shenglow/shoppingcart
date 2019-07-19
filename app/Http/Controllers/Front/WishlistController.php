@@ -32,10 +32,22 @@ class WishlistController extends Controller
 
         $wishlists = Wishlist::with('product', 'specification')->where('id', '=', $user->id)->get();
 
+        $count = 0;
+        $total = 0;
+        $allCart = session('cart');
+        if (is_array($allCart)) {
+            foreach($allCart as $key => $value) {
+                $count++;
+                $total += $value['total'];
+            }
+        }
+        $topCart = array('count' => $count, 'total' => '$'.number_format($total));
+
         return view('front.wishlist', [
             'user' => $user,
             'categories' => $arr_categories,
-            'wishlists' => $wishlists
+            'wishlists' => $wishlists,
+            'topCart' => $topCart
         ]);
     }
 

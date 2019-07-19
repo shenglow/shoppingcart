@@ -66,12 +66,24 @@ class ProductController extends Controller
         }
         $products = $query->paginate($perpage);
 
+        $count = 0;
+        $total = 0;
+        $allCart = session('cart');
+        if (is_array($allCart)) {
+            foreach($allCart as $key => $value) {
+                $count++;
+                $total += $value['total'];
+            }
+        }
+        $topCart = array('count' => $count, 'total' => '$'.number_format($total));
+
         return view('front.product-lists', [
             'user' => $user,
             'categories' => $arr_categories,
             'popular_products' => $popular_products,
             'cid' => $cid,
-            'products' => $products
+            'products' => $products,
+            'topCart' => $topCart
         ]);
     }
 
@@ -116,6 +128,17 @@ class ProductController extends Controller
             ])->get();
             $in_wishlist = (count($wishlist) > 0) ? 'disabled' : '';
         }
+
+        $count = 0;
+        $total = 0;
+        $allCart = session('cart');
+        if (is_array($allCart)) {
+            foreach($allCart as $key => $value) {
+                $count++;
+                $total += $value['total'];
+            }
+        }
+        $topCart = array('count' => $count, 'total' => '$'.number_format($total));
         
         return view('front.product', [
             'user' => $user,
@@ -125,7 +148,8 @@ class ProductController extends Controller
             'product' => $product,
             'specification' => $specification,
             'reviews' => $reviews,
-            'in_wishlist' => $in_wishlist
+            'in_wishlist' => $in_wishlist,
+            'topCart' => $topCart
         ]);
     }
 

@@ -34,11 +34,23 @@ class WebsiteController extends Controller
             );
         }
 
+        $count = 0;
+        $total = 0;
+        $allCart = session('cart');
+        if (is_array($allCart)) {
+            foreach($allCart as $key => $value) {
+                $count++;
+                $total += $value['total'];
+            }
+        }
+        $topCart = array('count' => $count, 'total' => '$'.number_format($total));
+
         return view('front.index', [
             'user' => $user,
             'new_products' => $new_products,
             'categories' => $arr_categories,
-            'popular_products' => $popular_products
+            'popular_products' => $popular_products,
+            'topCart' => $topCart
         ]);
     }
 }
