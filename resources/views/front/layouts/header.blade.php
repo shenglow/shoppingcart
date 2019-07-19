@@ -30,8 +30,8 @@
         <!-- BEGIN CART -->
         <div class="top-cart-block">
             <div class="top-cart-info">
-                <a href="javascript:void(0);" class="top-cart-info-count" id="cart-count">{{ $topCart['count'].' 項商品' }}</a>
-                <a href="javascript:void(0);" class="top-cart-info-value" id="cart-total">{{ $topCart['total'] }}</a>
+                <a href="{{ route('shoppingcart.index') }}" class="top-cart-info-count" id="cart-count">{{ $topCart['count'].' 項商品' }}</a>
+                <a href="{{ route('shoppingcart.index') }}" class="top-cart-info-value" id="cart-total">{{ $topCart['total'] }}</a>
             </div>
             <i class="fa fa-shopping-cart"></i>
         </div>
