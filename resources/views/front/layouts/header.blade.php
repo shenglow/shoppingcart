@@ -30,23 +30,10 @@
         <!-- BEGIN CART -->
         <div class="top-cart-block">
             <div class="top-cart-info">
-                <a href="javascript:void(0);" class="top-cart-info-count">3 items</a>
-                <a href="javascript:void(0);" class="top-cart-info-value">$1260</a>
+                <a href="{{ route('shoppingcart.index') }}" class="top-cart-info-count" id="cart-count">{{ $topCart['count'].' 項商品' }}</a>
+                <a href="{{ route('shoppingcart.index') }}" class="top-cart-info-value" id="cart-total">{{ $topCart['total'] }}</a>
             </div>
             <i class="fa fa-shopping-cart"></i>
-
-            <div class="top-cart-content-wrapper">
-                <div class="top-cart-content">
-                    <ul class="scroller" style="height: 250px;">
-                        <li>
-                        </li>
-                    </ul>
-                    <div class="text-right">
-                        <a href="#" class="btn btn-default">View Cart</a>
-                        <a href="#" class="btn btn-primary">Checkout</a>
-                    </div>
-                </div>
-            </div>
         </div>
       <!--END CART -->
     </div>

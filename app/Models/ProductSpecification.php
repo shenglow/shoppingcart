@@ -26,4 +26,12 @@ class ProductSpecification extends Model
      * @var array
      */
     protected $hidden = ['created_at', 'updated_at'];
+
+    /**
+     * Get the product of the spec.
+     */
+    public function product()
+    {
+        return $this->belongsTo('App\Models\Product', 'pid', 'pid');
+    }
 }

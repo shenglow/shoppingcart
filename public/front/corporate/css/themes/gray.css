@@ -129,9 +129,6 @@ a:hover {
 .search-result-item h4 a {
   color: #798b97;
 }
-.top-cart-content:after { 
-  border-bottom: 8px solid #798b97;
-}
 .goods-data a,
 .checkout-page .checkout-description a {
   color: #798b97;
@@ -317,10 +314,6 @@ a:hover {
 }
 .sidebar .collapsed:hover > .fa-angle-down {
   background-position: -66px -37px;
-}
-
-.top-cart-content {
-  border-top: solid 2px #93A2AB;
 }
 
 .front-skills .progress-bar {
