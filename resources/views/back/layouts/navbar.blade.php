@@ -53,8 +53,8 @@
 </li>
 
 <!-- Nav Item - Charts -->
-<li class="nav-item @yield('nav_product_order')">
-    <a class="nav-link" href="product-orders.html">
+<li class="nav-item @yield('nav_order')">
+    <a class="nav-link" href="{{ route('admin.order') }}">
         <i class="fas fa-fw fa-paste"></i>
         <span>訂單管理</span>
     </a>

@@ -8,6 +8,8 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
+    @yield('extra_meta')
+
     <title>@yield('title')</title>
 
     <!-- Custom fonts for this template-->
@@ -79,6 +81,7 @@
 
     <!-- Custom scripts for all pages-->
     <script src="{{ asset('back/js/sb-admin-2.min.js') }}"></script>
+    <script src="{{ asset('back/js/custom.js') }}"></script>
 
     <!-- Page level plugins -->
     <script src="{{ asset('back/vendor/chart.js/Chart.min.js') }}"></script>

@@ -60,4 +60,9 @@ Route::middleware(['auth:admin'])->prefix('admin')->name('admin.')->group(functi
     Route::resource('/product', 'Back\ProductController', ['except' => ['show', 'destroy']]);
     Route::get('/product/{c_name?}/{c_subname?}', 'Back\ProductController@index')->name('product.search');
     Route::get('/product/changestatus/{pid}/{status}', 'Back\ProductController@changeStatus')->name('product.changestatus');
+
+    // modify orders page
+    Route::get('/order', 'Back\OrderController@index')->name('order');
+    Route::get('/order/{oid}', 'Back\OrderController@show')->name('order.show');
+    Route::post('/order', 'Back\OrderController@changeStatus')->name('order');
 });
