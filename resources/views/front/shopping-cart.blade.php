@@ -91,7 +91,7 @@
                         </div>
                     </div>
                     <a class="btn btn-default" href="{{ url('/') }}">繼續購物 <i class="fa fa-shopping-cart"></i></a>
-                    <a class="btn btn-primary" href="javascript:;">結帳 <i class="fa fa-check"></i></a>
+                    <a class="btn btn-primary" href="{{ url('/checkout') }}">結帳 <i class="fa fa-check"></i></a>
                 </div>
             </div>
         </div>

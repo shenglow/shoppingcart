@@ -35,6 +35,10 @@ Route::middleware(['auth:web'])->group(function () {
 
     // wishlist
     Route::resource('/wishlist', 'Front\WishlistController', ['except' => ['create', 'show', 'edit', 'update']]);
+
+    //  checkout
+    Route::get('/checkout', 'Front\CheckoutController@index');
+    Route::post('/checkout', 'Front\CheckoutController@checkout');
 });
 
 Route::get('/admin/login', 'Back\AccountController@showAdminLoginForm');
