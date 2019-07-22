@@ -1052,26 +1052,6 @@ table .product-quantity .input-group {
 	opacity: 1;
 }
 
-/* product pop up */
-.product-pop-up {
-	padding: 0;
-	overflow-x: hidden;
-	background: inherit;
-}
-.product-pop-up .product-quantity, .product-pop-up .product-quantity .input-group {
-	margin-right: 15px;
-}
-.product-pop-up .product-page-cart .btn {
-	padding: 7px 5px;
-}
-.product-pop-up .product-page-cart a.btn {
-	padding: 9px 5px 5px;
-	display: inline-block;
-}
-.product-pop-up .btn-primary {
-	margin-right: 10px;
-}
-
 .product-page-content {
 	width: 100%;
 	overflow: hidden;

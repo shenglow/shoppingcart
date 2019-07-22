@@ -128,13 +128,12 @@
                             <div class="pi-img-wrapper">
                                 <img src="{{ asset($product->path.'/'.$arr_img[0]) }}" class="img-responsive" alt="{{ $product->name }}">
                                 <div>
-                                <a href="{{ asset($product->path.'/'.$arr_img[0]) }}" class="btn btn-default fancybox-button">Zoom</a>
-                                <a href="#product-pop-up" class="btn btn-default fancybox-fast-view">View</a>
+                                    <a href="{{ asset($product->path.'/'.$arr_img[0]) }}" class="btn btn-default fancybox-button">放大</a>
                                 </div>
                             </div>
                             <h3><a href="{{ url('product', [$product->cid, $product->pid]) }}">{{ $product->name }}</a></h3>
                             <div class="pi-price">${{ number_format($product->price) }}</div>
-                            <a href="javascript:;" class="btn btn-default add2cart">加到購物車</a>
+                            <a href="{{ url('product', [$product->cid, $product->pid]) }}" class="btn btn-default add2cart">購買</a>
                             <div class="sticker sticker-new"></div>
                         </div>
                     @endforeach
@@ -160,13 +159,12 @@
                             <div class="pi-img-wrapper">
                                 <img src="{{ asset($product->path.'/'.$arr_img[0]) }}" class="img-responsive" alt="{{ $product->name }}">
                                 <div>
-                                    <a href="{{ asset($product->path.'/'.$arr_img[0]) }}" class="btn btn-default fancybox-button">Zoom</a>
-                                    <a href="#product-pop-up" class="btn btn-default fancybox-fast-view">View</a>
+                                    <a href="{{ asset($product->path.'/'.$arr_img[0]) }}" class="btn btn-default fancybox-button">放大</a>
                                 </div>
                             </div>
                             <h3><a href="{{ url('product', [$product->cid, $product->pid]) }}">{{ $product->name }}</a></h3>
                             <div class="pi-price">${{ number_format($product->price) }}</div>
-                            <a href="javascript:;" class="btn btn-default add2cart">Add to cart</a>
+                            <a href="{{ url('product', [$product->cid, $product->pid]) }}" class="btn btn-default add2cart">購買</a>
                         </div>
                     @endforeach
                     </div>
