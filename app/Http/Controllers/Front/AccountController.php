@@ -10,6 +10,8 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
 use Auth;
 use Session;
+use App\Mail\ForgotPassword;
+use Illuminate\Support\Facades\Mail;
 
 class AccountController extends Controller
 {
@@ -155,7 +157,7 @@ class AccountController extends Controller
         }
     }
 
-     /**
+    /**
      * Use default logout function to log the user out of the application but override redirect path
      *
      * @param  \Illuminate\Http\Request  $request
@@ -165,5 +167,65 @@ class AccountController extends Controller
     {
         $this->performLogout($request);
         return redirect()->to('/');
+    }
+
+    /**
+     * Show forgot password form
+     */
+    public function showForgotPasswordForm()
+    {
+        return view('front.forgot-password');
+    }
+
+    /**
+     * Reset random password
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function forgotPassword(Request $request)
+    {
+        $arr_msg = array();
+
+        $rules = [
+            'username' => 'required',
+            'email' => 'required|email',
+        ];
+
+        $messages = [
+            'username.required' => 'username 為必填欄位',
+            'email.required' => 'email 為必填欄位',
+            'email.email' => 'email 格式不正確',
+        ];
+
+        $validator = Validator::make($request->all(), $rules, $messages);
+
+        if ($validator->fails()) {
+            $str_content = '';
+            foreach ($validator->errors()->all() as $message) {
+                $arr_msg[] = $message;
+            }
+        } else {
+            $users = User::where('username', '=', $request->input('username'))->where('email', '=', $request->input('email'))->get();
+            if (count($users) <= 0) {
+                $arr_msg[] = 'username或email不正確';
+            } else {
+                foreach($users as $user) {
+                    $randomPassword = str_random(16);
+                    $user->password = bcrypt($randomPassword);
+                    $user->save();
+
+                    Mail::to($user->email)->send(new ForgotPassword($user->username, $randomPassword));
+                }
+            }
+        }
+
+        if (count($arr_msg) > 0) {
+            $msg = array('content' => '重設失敗: '.implode(',', $arr_msg), 'type' => 'alert-danger');
+            Session::flash('msg', $msg);
+            return redirect('forgotpassword')->withInput();
+        } else {
+            return redirect('login');
+        }
     }
 }
