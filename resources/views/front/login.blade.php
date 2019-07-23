@@ -35,10 +35,10 @@
                 </form>
                 <hr>
                 <div class="text-center">
-                    <a class="small" href="#">忘記密碼?</a>
+                    <a class="small" href="{{ url('forgotpassword') }}">忘記密碼?</a>
                 </div>
                 <div class="text-center">
-                    <a class="small" href="{{ url('register') }}">申請帳號!</a>
+                    <a class="small" href="{{ url('register') }}">建立帳號!</a>
                 </div>
             </div>
         </div>

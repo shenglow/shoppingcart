@@ -35,7 +35,7 @@
                 </form>
                 <hr>
                 <div class="text-center">
-                    <a class="small" href="#">忘記密碼?</a>
+                    <a class="small" href="{{ url('forgotpassword') }}">忘記密碼?</a>
                 </div>
                 <div class="text-center">
                     <a class="small" href="{{ url('login') }}">已經有帳號?登入!</a>
