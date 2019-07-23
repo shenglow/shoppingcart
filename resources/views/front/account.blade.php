@@ -36,12 +36,11 @@
                     <h3>帳戶相關</h3>
                     <ul>
                         <li><a href="{{ route('account.edit')}}">修改帳戶資料</a></li>
-                        <li><a href="{{ route('wishlist.index') }}">追蹤清單</a></li>
                     </ul>
                     <hr>
                     <h3>訂單相關</h3>
                     <ul>
-                        <li><a href="javascript:;">訂單查詢</a></li>
+                        <li><a href="{{ route('account.order') }}">訂單查詢</a></li>
                     </ul>
                     <hr>
                     <h3>其他</h3>

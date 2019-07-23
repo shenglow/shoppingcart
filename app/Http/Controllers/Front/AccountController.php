@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Front;
 
 use App\Models\User;
+use App\Models\Order;
+use App\Models\OrderProduct;
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Support\Facades\Hash;
@@ -72,7 +74,7 @@ class AccountController extends Controller
     }
 
     /**
-     * Show login form
+     * Show edit account form
      */
     public function showEditAccountForm()
     {
@@ -96,7 +98,7 @@ class AccountController extends Controller
     }
 
     /**
-     * Validate required fields and register user
+     * Validate required fields and update account info
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
@@ -347,5 +349,73 @@ class AccountController extends Controller
         } else {
             return redirect('login');
         }
+    }
+
+    /**
+     * List order
+     */
+    public function listOrder()
+    {
+        $user = Auth::user();
+
+        $count = 0;
+        $total = 0;
+        $allCart = session('cart');
+        if (is_array($allCart)) {
+            foreach($allCart as $key => $value) {
+                $count++;
+                $total += $value['total'];
+            }
+        }
+        $topCart = array('count' => $count, 'total' => '$'.number_format($total));
+
+        $orders = Order::where('id', '=', $user->id)->orderBy('created_at', 'desc')->get();
+
+        return view('front.account-listorder', [
+            'user' => $user,
+            'topCart' => $topCart,
+            'orders' => $orders
+        ]);
+    }
+
+    /**
+     * Show order detail
+     * 
+     * @param  \Illuminate\Http\Request  $request
+     * @param  integer $oid
+     * 
+     * @return \Illuminate\Http\Response
+     */
+    public function showOrder(Request $request, $oid)
+    {
+        $user = Auth::user();
+
+        $order = Order::find($oid);
+        if ($order === null || $order->id != $user->id) {
+            $msg = array('content' => '查無此訂單', 'type' => 'alert-danger');
+            $request->session()->flash('msg', $msg);
+
+            return redirect()->route('account.order');
+        }
+
+        $orderProducts = OrderProduct::with('product', 'specification')->where('oid', '=', $oid)->get();
+
+        $count = 0;
+        $total = 0;
+        $allCart = session('cart');
+        if (is_array($allCart)) {
+            foreach($allCart as $key => $value) {
+                $count++;
+                $total += $value['total'];
+            }
+        }
+        $topCart = array('count' => $count, 'total' => '$'.number_format($total));
+
+        return view('front.account-listorder-detail', [
+            'user' => $user,
+            'topCart' => $topCart,
+            'order' => $order,
+            'orderProducts' => $orderProducts
+        ]);
     }
 }
