@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Front;
 
 use App\Models\User;
+use App\Models\Order;
+use App\Models\OrderProduct;
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Support\Facades\Hash;
@@ -44,7 +46,127 @@ class AccountController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('guest:web')->except('logout');
+        // $this->middleware('guest:web')->except('logout');
+    }
+
+    /**
+     * Show account index page
+     */
+    public function index()
+    {
+        $user = Auth::user();
+
+        $count = 0;
+        $total = 0;
+        $allCart = session('cart');
+        if (is_array($allCart)) {
+            foreach($allCart as $key => $value) {
+                $count++;
+                $total += $value['total'];
+            }
+        }
+        $topCart = array('count' => $count, 'total' => '$'.number_format($total));
+
+        return view('front.account', [
+            'user' => $user,
+            'topCart' => $topCart
+        ]);
+    }
+
+    /**
+     * Show edit account form
+     */
+    public function showEditAccountForm()
+    {
+        $user = Auth::user();
+
+        $count = 0;
+        $total = 0;
+        $allCart = session('cart');
+        if (is_array($allCart)) {
+            foreach($allCart as $key => $value) {
+                $count++;
+                $total += $value['total'];
+            }
+        }
+        $topCart = array('count' => $count, 'total' => '$'.number_format($total));
+
+        return view('front.account-edit', [
+            'user' => $user,
+            'topCart' => $topCart
+        ]);
+    }
+
+    /**
+     * Validate required fields and update account info
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function editAccount(Request $request)
+    {
+        $user = Auth::user();
+
+        if (empty($request->input('original_password'))) {
+            $rules = [
+                'email' => 'required|email',
+            ];
+    
+            $messages = [
+                'email.required' => 'E-Mail為必填欄位',
+                'email.email' => 'E-Mail格式不正確',
+            ];
+        } else {
+            $rules = [
+                'email' => 'required|email',
+                'new_password' => 'required_with:original_password|min:8|regex:/[a-z]/|regex:/[A-Z]/|regex:/[0-9]/|regex:/[@$!%*#?&]/',
+                'repeat_password' => 'required_with:original_password|min:8|same:new_password',
+            ];
+    
+            $messages = [
+                'email.required' => 'E-Mail為必填欄位',
+                'email.email' => 'E-Mail格式不正確',
+                'new_password.regex' => '新密碼必須包含大小寫字母,數字,特殊符號',
+                '*.required_with' => '新密碼為必填欄位',
+                '*.min' => '新密碼最少8位數',
+                'repeat_password.same' => '密碼不一致',
+            ];
+        }
+
+        $validator = Validator::make($request->all(), $rules, $messages);
+
+        $arr_msg = array();
+        if ($validator->fails()) {
+            $str_content = '';
+            foreach ($validator->errors()->all() as $message) {
+                if (!in_array($message, $arr_msg)) $arr_msg[] = $message;
+            }
+        } else {
+            $users = User::where('email', '=', $request->input('email'))->where('id', '!=', $user->id)->get();
+            if (count($users) > 0) {
+                $arr_msg[] = 'E-Mail已被使用';
+            }
+
+            if (!empty($request->input('original_password'))) {
+                if (!Hash::check($request->input('original_password'), $user->password)) {
+                    $arr_msg[] = '舊密碼不正確';
+                }
+            }
+        }
+
+        if (count($arr_msg) > 0) {
+            $msg = array('content' => '修改失敗: '.implode(',', $arr_msg), 'type' => 'alert-danger');
+            Session::flash('msg', $msg);
+            return redirect()->route('account.edit')->withInput();
+        } else {
+            $user->email = $request->input('email');
+            $user->password = bcrypt($request->input('new_password'));
+            $user->save();
+
+            $msg = array('content' => '修改成功', 'type' => 'alert-success');
+            Session::flash('msg', $msg);
+            return redirect()->route('account.index');
+        }
     }
 
     /**
@@ -227,5 +349,73 @@ class AccountController extends Controller
         } else {
             return redirect('login');
         }
+    }
+
+    /**
+     * List order
+     */
+    public function listOrder()
+    {
+        $user = Auth::user();
+
+        $count = 0;
+        $total = 0;
+        $allCart = session('cart');
+        if (is_array($allCart)) {
+            foreach($allCart as $key => $value) {
+                $count++;
+                $total += $value['total'];
+            }
+        }
+        $topCart = array('count' => $count, 'total' => '$'.number_format($total));
+
+        $orders = Order::where('id', '=', $user->id)->orderBy('created_at', 'desc')->get();
+
+        return view('front.account-listorder', [
+            'user' => $user,
+            'topCart' => $topCart,
+            'orders' => $orders
+        ]);
+    }
+
+    /**
+     * Show order detail
+     * 
+     * @param  \Illuminate\Http\Request  $request
+     * @param  integer $oid
+     * 
+     * @return \Illuminate\Http\Response
+     */
+    public function showOrder(Request $request, $oid)
+    {
+        $user = Auth::user();
+
+        $order = Order::find($oid);
+        if ($order === null || $order->id != $user->id) {
+            $msg = array('content' => '查無此訂單', 'type' => 'alert-danger');
+            $request->session()->flash('msg', $msg);
+
+            return redirect()->route('account.order');
+        }
+
+        $orderProducts = OrderProduct::with('product', 'specification')->where('oid', '=', $oid)->get();
+
+        $count = 0;
+        $total = 0;
+        $allCart = session('cart');
+        if (is_array($allCart)) {
+            foreach($allCart as $key => $value) {
+                $count++;
+                $total += $value['total'];
+            }
+        }
+        $topCart = array('count' => $count, 'total' => '$'.number_format($total));
+
+        return view('front.account-listorder-detail', [
+            'user' => $user,
+            'topCart' => $topCart,
+            'order' => $order,
+            'orderProducts' => $orderProducts
+        ]);
     }
 }

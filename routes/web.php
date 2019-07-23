@@ -35,10 +35,17 @@ Route::middleware(['auth:web'])->group(function () {
     // add review
     Route::post('/product/review/{pid}', 'Front\ProductController@addReview')->name('product.review');
 
+    // account
+    Route::get('/account', 'Front\AccountController@index')->name('account.index');
+    Route::get('/account/edit', 'Front\AccountController@showEditAccountForm')->name('account.edit');
+    Route::post('/account/edit', 'Front\AccountController@editAccount')->name('account.update');
+    Route::get('/account/order', 'Front\AccountController@listOrder')->name('account.order');
+    Route::get('/account/order/{oid}', 'Front\AccountController@showOrder')->name('account.order.show');
+    
     // wishlist
     Route::resource('/wishlist', 'Front\WishlistController', ['except' => ['create', 'show', 'edit', 'update']]);
 
-    //  checkout
+    // checkout
     Route::get('/checkout', 'Front\CheckoutController@index');
     Route::post('/checkout', 'Front\CheckoutController@checkout');
 });

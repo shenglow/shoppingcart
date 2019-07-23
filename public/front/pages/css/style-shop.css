@@ -422,6 +422,29 @@ Header and header elements
 	margin-left: -10px;
 }
 
+/* order list page */
+.orders-data {
+	background: #fff;
+	padding: 20px;
+	margin-bottom: 20px;
+	overflow-x: auto;
+	margin-right: 10px;
+}
+.orders-data table {
+	width: 100%;
+	font: 300 13px 'Open Sans', sans-serif;
+}
+.orders-data th {
+	font: 16px "PT Sans Narrow", sans-serif;
+	text-transform: uppercase;
+	border-bottom: solid 1px #ecebeb;
+	padding-bottom: 8px;
+}
+.orders-data td {
+	padding: 10px;
+	border-bottom: solid 1px #ecebeb;
+}
+
 /* shopping cart page */
 .goods-data {
 	background: #fff;
@@ -726,7 +749,7 @@ div.radio.disabled span.checked, div.radio.disabled.active span.checked {
 	padding: 20px;
 }
 .compare-item {
-	text-align: center;
+	text-align: left;
 }
 .compare-item img {
 	width: 100%;
