@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Product;
 use App\Models\Category;
+use App\Models\Carousel;
 
 class WebsiteController extends Controller
 {
@@ -16,6 +17,8 @@ class WebsiteController extends Controller
     public function index()
     {
         $user = Auth::user();
+
+        $carousels = Carousel::where('status', '=', true)->get();
 
         $new_products = Product::where('is_enable', true)->orderBy('created_at', 'desc')->take(10)->get();
 
@@ -47,6 +50,7 @@ class WebsiteController extends Controller
 
         return view('front.index', [
             'user' => $user,
+            'carousels' => $carousels,
             'new_products' => $new_products,
             'categories' => $arr_categories,
             'popular_products' => $popular_products,
