@@ -45,18 +45,18 @@
 </li>
 
 <!-- Nav Item - Charts -->
-<li class="nav-item @yield('nav_product_main')">
-    <a class="nav-link" href="product-main.html">
-        <i class="fas fa-fw fa-bullhorn"></i>
-        <span>主打商品設定</span>
-    </a>
-</li>
-
-<!-- Nav Item - Charts -->
 <li class="nav-item @yield('nav_order')">
     <a class="nav-link" href="{{ route('admin.order') }}">
         <i class="fas fa-fw fa-paste"></i>
         <span>訂單管理</span>
+    </a>
+</li>
+
+<!-- Nav Item - Charts -->
+<li class="nav-item @yield('nav_carousel')">
+    <a class="nav-link" href="{{ route('admin.carousel.index') }}">
+        <i class="fas fa-fw fa-bullhorn"></i>
+        <span>輪播設定</span>
     </a>
 </li>
 

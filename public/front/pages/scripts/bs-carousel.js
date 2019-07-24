@@ -27,7 +27,7 @@ var BsCarousel = function () {
         }
         
         //Variables on page load 
-        var $myCarousel = $('#carousel-example-generic'),
+        var $myCarousel = $('#carousel-generic'),
             $firstAnimatingElems = $myCarousel.find('.item:first').find("[data-animation ^= 'animated']");
             
         //Initialize carousel 

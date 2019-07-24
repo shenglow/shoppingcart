@@ -76,6 +76,9 @@ Route::middleware(['auth:admin'])->prefix('admin')->name('admin.')->group(functi
     Route::get('/order/{oid}', 'Back\OrderController@show')->name('order.show');
     Route::post('/order', 'Back\OrderController@changeStatus')->name('order');
 
+    // modify carousel page
+    Route::resource('/carousel', 'Back\CarouselController', ['except' => ['show']]);
+
     // modify faq page
     Route::resource('/faq', 'Back\FaqController', ['except' => ['show']]);
 });
