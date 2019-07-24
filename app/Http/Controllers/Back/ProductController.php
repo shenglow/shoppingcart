@@ -155,7 +155,6 @@ class ProductController extends Controller
 
         $product->save();
 
-        
         foreach ($request->input('specification') as $key => $value) {
             $specification = '';
             $quantity = 0;
@@ -164,6 +163,8 @@ class ProductController extends Controller
                 if (isset($request->input('quantity')[$key])) {
                     $quantity = $request->input('quantity')[$key];
                 }
+            } else {
+                continue;
             }
 
             $productSpecification = new ProductSpecification;
