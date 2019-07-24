@@ -19,4 +19,12 @@ class Order extends Model
      * @var integer
      */
     protected $primaryKey = 'oid';
+
+    /**
+     * Get the order products record associated with the order.
+     */
+    public function products()
+    {
+        return $this->hasMany('App\Models\OrderProduct', 'oid', 'oid');
+    }
 }
