@@ -74,4 +74,7 @@ Route::middleware(['auth:admin'])->prefix('admin')->name('admin.')->group(functi
     Route::get('/order', 'Back\OrderController@index')->name('order');
     Route::get('/order/{oid}', 'Back\OrderController@show')->name('order.show');
     Route::post('/order', 'Back\OrderController@changeStatus')->name('order');
+
+    // modify faq page
+    Route::resource('/faq', 'Back\FaqController', ['except' => ['show']]);
 });
