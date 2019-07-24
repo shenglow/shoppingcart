@@ -29,7 +29,7 @@ class CheckoutController extends Controller
                 $total += $value['total'];
             }
         } else {
-            $allCart = array();
+            return redirect()->route('shoppingcart.index');
         }
         $topCart = array('count' => $count, 'total' => '$'.number_format($total));
 

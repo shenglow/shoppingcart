@@ -13,7 +13,7 @@
                     @endif
                     <li><a href="{{ route('account.index') }}">會員中心</a></li>
                     <li><a href="{{ route('wishlist.index') }}">追蹤清單</a></li>
-                    <li><a href="#">結帳</a></li>
+                    <li><a href="{{ url('checkout') }}">結帳</a></li>
                 </ul>
             </div>
             <!-- END TOP BAR MENU -->
