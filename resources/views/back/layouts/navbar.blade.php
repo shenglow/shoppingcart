@@ -78,7 +78,7 @@
 
 <!-- Nav Item - Tables -->
 <li class="nav-item @yield('nav_faq')">
-    <a class="nav-link" href="faq.html">
+    <a class="nav-link" href="{{ route('admin.faq.index') }}">
         <i class="fas fa-fw fa-table"></i>
         <span>常見問題</span>
     </a>
