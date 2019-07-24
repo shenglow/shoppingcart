@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Front;
 use App\Models\User;
 use App\Models\Order;
 use App\Models\OrderProduct;
+use App\Models\Faq;
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Support\Facades\Hash;
@@ -416,6 +417,33 @@ class AccountController extends Controller
             'topCart' => $topCart,
             'order' => $order,
             'orderProducts' => $orderProducts
+        ]);
+    }
+
+    /**
+     * List order
+     */
+    public function listFaq()
+    {
+        $user = Auth::user();
+
+        $count = 0;
+        $total = 0;
+        $allCart = session('cart');
+        if (is_array($allCart)) {
+            foreach($allCart as $key => $value) {
+                $count++;
+                $total += $value['total'];
+            }
+        }
+        $topCart = array('count' => $count, 'total' => '$'.number_format($total));
+
+        $faqs = Faq::where('status', '=', true)->orderBy('created_at')->get();
+
+        return view('front.account-faq', [
+            'user' => $user,
+            'topCart' => $topCart,
+            'faqs' => $faqs
         ]);
     }
 }

@@ -41,6 +41,7 @@ Route::middleware(['auth:web'])->group(function () {
     Route::post('/account/edit', 'Front\AccountController@editAccount')->name('account.update');
     Route::get('/account/order', 'Front\AccountController@listOrder')->name('account.order');
     Route::get('/account/order/{oid}', 'Front\AccountController@showOrder')->name('account.order.show');
+    Route::get('/account/faq', 'Front\AccountController@listFaq')->name('account.faq');
     
     // wishlist
     Route::resource('/wishlist', 'Front\WishlistController', ['except' => ['create', 'show', 'edit', 'update']]);

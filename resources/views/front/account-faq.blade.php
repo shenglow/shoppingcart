@@ -4,7 +4,6 @@
 
 @section('custom_css')
 <!-- Page level plugin styles START -->
-<link href="{{ asset('front/pages/css/animate.css') }}" rel="stylesheet" type="text/css">
 <link href="{{ asset('front/plugins/fancybox/source/jquery.fancybox.css') }}" rel="stylesheet" type="text/css">
 <link href="{{ asset('front/plugins/owl.carousel/assets/owl.carousel.css') }}" rel="stylesheet" type="text/css">
 <!-- Page level plugin styles END -->
@@ -26,28 +25,36 @@
         <div class="row margin-bottom-40">
             <!-- BEGIN CONTENT -->
             <div class="col-xs-12">
-                <h1>會員中心</h1>
-                @if (session('msg'))
-                    <div class="alert {{ session()->get('msg')['type'] }}" role="alert">
-                        {{ session()->get('msg')['content'] }}
+                <h1>常見問答</h1>
+                @if (count($faqs) <= 0)
+                    <div class="shopping-cart-page">
+                        <div class="shopping-cart-data clearfix">
+                            <p>暫時沒有問答!</p>
+                        </div>
+                    </div>
+                @else
+                    <div class="faq-page">
+                        @foreach($faqs as $key => $faq)
+                            @php
+                                $no = $key + 1;
+                            @endphp
+                            <div class="panel panel-default">
+                                <div class="panel-heading">
+                                    <h4 class="panel-title">
+                                        <a class="accordion-toggle" data-toggle="collapse" href="#accordion{{$no}}">
+                                        {{ $no }}.{{ $faq->question }}
+                                        </a>
+                                    </h4>
+                                </div>
+                                <div id="accordion{{$no}}" class="panel-collapse collapse">
+                                    <div class="panel-body">
+                                    {{ $faq->answer }}
+                                    </div>
+                                </div>
+                            </div>
+                        @endforeach
                     </div>
                 @endif
-                <div class="content-page">
-                    <h3>帳戶相關</h3>
-                    <ul>
-                        <li><a href="{{ route('account.edit')}}">修改帳戶資料</a></li>
-                    </ul>
-                    <hr>
-                    <h3>訂單相關</h3>
-                    <ul>
-                        <li><a href="{{ route('account.order') }}">訂單查詢</a></li>
-                    </ul>
-                    <hr>
-                    <h3>其他</h3>
-                    <ul>
-                        <li><a href="{{ route('account.faq') }}">常見問題</a></li>
-                    </ul>
-                </div>
             </div>
             <!-- END CONTENT -->
         </div>
@@ -62,7 +69,6 @@
 <script src="{{ asset('front/plugins/owl.carousel/owl.carousel.min.js') }}" type="text/javascript"></script>
 
 <script src="{{ asset('front/corporate/scripts/layout.js') }}" type="text/javascript"></script>
-<script src="{{ asset('front/pages/scripts/bs-carousel.js') }}" type="text/javascript"></script>
 <script type="text/javascript">
     jQuery(document).ready(function () {
         Layout.init();
