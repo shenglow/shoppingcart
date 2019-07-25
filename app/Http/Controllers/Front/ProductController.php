@@ -60,7 +60,7 @@ class ProductController extends Controller
                 break;
         }
 
-        $query = Product::where('cid', $cid);
+        $query = Product::where('cid', $cid)->where('is_enable', true);
         foreach ($arr_order as $key => $value) {
             $query->orderBy($key, $value);
         }
@@ -114,7 +114,7 @@ class ProductController extends Controller
                 return $category;
         });
 
-        $product = Product::find($pid);
+        $product = Product::where('pid', $pid)->where('is_enable', true)->first();
 
         $specification = Product::find($pid)->specification;
 
