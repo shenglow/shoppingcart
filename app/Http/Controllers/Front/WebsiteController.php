@@ -26,7 +26,7 @@ class WebsiteController extends Controller
         $arr_categories = array();
         
         $popular_products = Category::with('products')->where('show_popular', true)->get()->map(function($category) {
-            $category->setRelation('products', $category->products->where('is_enable', true)->sortByDesc('created_at')->take(3));
+            $category->setRelation('products', $category->products->where('is_enable', true)->sortByDesc('views')->take(3));
             return $category;
         });
 

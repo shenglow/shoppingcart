@@ -37,7 +37,7 @@ class ProductController extends Controller
             ->where('cid', $cid)
             ->get()
             ->map(function($category) {
-                $category->setRelation('products', $category->products->where('is_enable', true)->sortByDesc('created_at')->take(3));
+                $category->setRelation('products', $category->products->where('is_enable', true)->sortByDesc('views')->take(3));
                 return $category;
         });
 
@@ -110,11 +110,15 @@ class ProductController extends Controller
             ->where('cid', $cid)
             ->get()
             ->map(function($category) {
-                $category->setRelation('products', $category->products->where('is_enable', true)->sortByDesc('created_at')->take(3));
+                $category->setRelation('products', $category->products->where('is_enable', true)->sortByDesc('views')->take(3));
                 return $category;
         });
 
         $product = Product::where('pid', $pid)->where('is_enable', true)->first();
+        if ($product !== null) {
+            $product->views++;
+            $product->save();
+        }
 
         $specification = Product::find($pid)->specification;
 

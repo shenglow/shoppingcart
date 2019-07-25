@@ -23,6 +23,7 @@ class CreateProductsTable extends Migration
             $table->string('path', 100);
             $table->text('image');
             $table->boolean('is_enable')->default(false);
+            $table->integer('views')->default(0);
             $table->timestamps();
         });
     }
