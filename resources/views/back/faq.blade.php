@@ -32,20 +32,20 @@
                         <thead>
                             <tr>
                                 <th class="text-left">問題</th>
-                                <th>狀態</th>
-                                <th></th>
+                                <th width="10%">狀態</th>
+                                <th width="20%"></th>
                             </tr>
                         </thead>
                         <tbody>
                             @foreach ($faqs as $faq)
                                 <tr>
-                                    <td class="text-left">{{ $faq->question }}</td>
+                                    <td class="text-left align-middle">{{ $faq->question }}</td>
                                     @if ($faq->status)
-                                        <td class="text-success">顯示</td>
+                                        <td class="text-success align-middle">顯示</td>
                                     @else 
-                                        <td class="text-danger">隱藏</td>
+                                        <td class="text-danger align-middle">隱藏</td>
                                     @endif
-                                    <td>
+                                    <td class="align-middle">
                                         <a href="{{ route('admin.faq.edit', $faq->fid) }}" class="btn btn-primary">
                                             <span class="text">編輯</span>
                                         </a>
