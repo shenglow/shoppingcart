@@ -37,7 +37,7 @@ class ProductController extends Controller
             ->where('cid', $cid)
             ->get()
             ->map(function($category) {
-                $category->setRelation('products', $category->products->sortByDesc('created_at')->take(3));
+                $category->setRelation('products', $category->products->where('is_enable', true)->sortByDesc('created_at')->take(3));
                 return $category;
         });
 
@@ -110,7 +110,7 @@ class ProductController extends Controller
             ->where('cid', $cid)
             ->get()
             ->map(function($category) {
-                $category->setRelation('products', $category->products->sortByDesc('created_at')->take(3));
+                $category->setRelation('products', $category->products->where('is_enable', true)->sortByDesc('created_at')->take(3));
                 return $category;
         });
 
