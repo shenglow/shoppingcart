@@ -9,6 +9,11 @@
 
 @section('nav_order', 'active')
 
+@section('custom_css')
+<!-- Custom styles for this page -->
+<link href="{{ asset('back/vendor/datatables/dataTables.bootstrap4.min.css') }}" rel="stylesheet">
+@endsection
+
 @section('content')
 <!-- Begin Page Content -->
 <div class="container-fluid">
@@ -36,17 +41,17 @@
                 </div>
             </div>
             <div class="table-responsive">
-                <table class="table table-bordered text-center" width="100%" cellspacing="0">
+                <table class="table table-bordered text-center" id="order_table" width="100%" cellspacing="0">
                     <thead>
                         <tr>
                             <th width="2%"></th>
-                            <th width="10%">訂單編號</th>
+                            <th width="12%">訂單編號</th>
                             <th width="13%">訂購日期</th>
                             <th width="15%">收件人姓名</th>
                             <th width="15%">收件人電話</th>
                             <th width="20%">收件人地址</th>
                             <th width="10%">狀態</th>
-                            <th width="15%"></th>
+                            <th width="13%"></th>
                         </tr>
                     </thead>
                     <tbody>
@@ -93,6 +98,10 @@
 @endsection
 
 @section('custom_script')
+<!-- Page level plugins -->
+<script src="{{ asset('back/vendor/datatables/jquery.dataTables.min.js') }}"></script>
+<script src="{{ asset('back/vendor/datatables/dataTables.bootstrap4.min.js') }}"></script>
+
 <script>
     $(document).ready(function() {
         // set cancel to all checked order
@@ -121,6 +130,34 @@
                 location.reload();
             })
             return false;
+        });
+
+        $('#order_table').DataTable({
+            "order": [[1, 'asc']],
+            "columnDefs": [
+                { "orderable": false, "targets": [0, 7] }
+            ],
+            "language": {
+                "decimal":        "",
+                "emptyTable":     "查無資料",
+                "info":           "顯示 _START_ 至 _END_ 項結果, 共 _TOTAL_ 項",
+                "infoEmpty":      "顯示 0 至 0 項結果, 共 0 項",
+                "infoFiltered":   "(從 _MAX_ 項結果中過濾)",
+                "infoPostFix":    "",
+                "thousands":      ",",
+                "lengthMenu":     "顯示 _MENU_ 項結果",
+                "loadingRecords": "載入中...",
+                "processing":     "處理中...",
+                "search":         "搜尋:",
+                "zeroRecords":    "查無符合的項目",
+                "paginate": {
+                    "next":       "下一頁",
+                    "previous":   "上一頁"
+                }
+            },
+            "searching": false,
+            "bLengthChange": false,
+            "pageLength": 10
         });
     });
 </script>

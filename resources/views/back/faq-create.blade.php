@@ -47,14 +47,14 @@
                     </div>
                 </div>
                 <hr>
-                <div class="row">
+                <div class="row float-right">
                     <div class="col">
-                        <button type="submit" class="btn btn-primary btn-icon-split">
-                            <span class="icon text-white-50">
-                                <i class="fas fa-plus"></i>
-                            </span>
-                            <span class="text">新增問答</span>
+                        <button type="submit" class="btn btn-primary">
+                            <span class="text">新增</span>
                         </button>
+                        <a href="{{ route('admin.faq.index') }}" class="btn btn-secondary">
+                            <span class="text">取消</span>
+                        </a>
                     </div>
                 </div>
             </form>

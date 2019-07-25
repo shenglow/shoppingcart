@@ -41,13 +41,13 @@
                             @foreach ($carousels as $carousel)
                                 <tr>
                                     <td><img src="{{ asset($carousel->image) }}" alt="Carousel" class="img-thumbnail"></td>
-                                    <td>{{ $carousel->href }}</td>
+                                    <td class="align-middle">{{ $carousel->href }}</td>
                                     @if ($carousel->status)
-                                        <td class="text-success">顯示</td>
+                                        <td class="text-success align-middle">顯示</td>
                                     @else 
-                                        <td class="text-danger">隱藏</td>
+                                        <td class="text-danger align-middle">隱藏</td>
                                     @endif
-                                    <td>
+                                    <td class="align-middle">
                                         <a href="{{ route('admin.carousel.edit', $carousel->carousel_id) }}" class="btn btn-primary">
                                             <span class="text">編輯</span>
                                         </a>
