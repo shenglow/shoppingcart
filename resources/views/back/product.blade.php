@@ -79,7 +79,7 @@
                                     <td>{{ $product->name }}</td>
                                     <td>{{ $product_list->name }}</td>
                                     <td>{{ $product_list->subname }}</td>
-                                    <td>{{ $product->price }}</td>
+                                    <td>${{ number_format($product->price) }}</td>
                                     <td>
                                         <a href="{{ route('admin.product.edit', $product->pid) }}" class="btn btn-primary">
                                             <span class="text">編輯</span>

@@ -93,8 +93,8 @@
                                     {{ $orderProduct->product->description }}
                                 </td>
                                 <td>{{ $orderProduct->quantity }}</td>
-                                <td>{{ $orderProduct->price }}</td>
-                                <td>{{ $orderProduct->quantity * $orderProduct->price }}</td>
+                                <td>${{ number_format($orderProduct->price) }}</td>
+                                <td>${{ number_format($orderProduct->quantity * $orderProduct->price) }}</td>
                             </tr>
                             @endforeach
                         </tbody>
