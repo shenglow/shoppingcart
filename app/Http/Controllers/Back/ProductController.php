@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Back;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use App\Models\Category;
 use App\Models\Product;
 use App\Models\ProductSpecification;
@@ -33,34 +34,78 @@ class ProductController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @param  string  $c_name
-     * @param  string  $c_subname
+     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function index($c_name = '', $c_subname = '')
+    public function index(Request $request)
     {
-        $categories = Category::all();
-        $arr_categories = array();
+        // process datatables ajax request
+        if ($request->ajax()) {
+            // request data
+            $start = $request->input('start');
+            $length = $request->input('length');
+            $columns = $request->input('columns');
+            $order = $request->input('order');
+            $search = $request->input('search');
 
-        foreach($categories as $category) {
-            $arr_categories[$category->name][] = array(
-                'cid' => $category->cid,
-                'subname' => $category->subname
-            );
+            $orderBy = $columns[$order[0]['column']]['name'];
+            $orderType = $order[0]['dir'];
+            switch ($orderBy) {
+                case 'name':
+                    $orderBy = 'products.name';
+                    break;
+                case 'price':
+                    $orderBy = 'products.price';
+                    break;
+                case 'c_name':
+                case 'c_subname':
+                    $orderBy = substr($orderBy, 2);
+                    $orderBy = 'categories.'.$orderBy;
+                    break;
+            }
+
+            // set query
+            $result = array();
+            $query = DB::table('products')
+                ->leftJoin('categories', 'products.cid', '=', 'categories.cid')
+                ->select('products.*', 'categories.name as c_name', 'categories.subname as c_subname');
+            if (!empty($search['value'])) {
+                $query->where('products.name', 'like', '%'.$search['value'].'%');
+                $query->orWhere('categories.name', 'like', '%'.$search['value'].'%');
+                $query->orWhere('categories.subname', 'like', '%'.$search['value'].'%');
+            }
+            $query->orderBy($orderBy, $orderType);
+
+            // count total record
+            $total = $query->count();
+            
+            // set record limit
+            $query->offset($start);
+            $query->limit($length);
+
+            // execute query
+            $products = $query->get();
+
+            foreach ($products as $product) {
+                $result[] = array(
+                    'name' => $product->name,
+                    'c_name' => $product->c_name,
+                    'c_subname' => $product->c_subname,
+                    'price' => '$'.number_format($product->price),
+                    'action' => $product->pid.'-'.$product->is_enable
+                );
+            }
+
+            $response = array();
+            $response['success'] = true;
+            $response['recordsTotal'] = $total;
+            $response['recordsFiltered'] = $total;
+            $response['data'] = $result;
+            return json_encode($response);
         }
 
-        $arr_where = array();
-        if (!empty($c_name)) $arr_where[] = array('name', '=', $c_name);
-        if (!empty($c_subname)) $arr_where[] = array('subname', '=', $c_subname);
-
-        $products = Category::with('products')->where($arr_where)->get();
-
         return view('back.product', [
-            'user' => $this->user,
-            'categories' => $arr_categories,
-            'products' => $products,
-            'c_name' => $c_name,
-            'c_subname' => $c_subname
+            'user' => $this->user
         ]);
     }
 
