@@ -61,7 +61,8 @@
     $(document).ready(function() {
         $('#product_table').DataTable({
             "columnDefs": [
-                { "orderable": false, "targets": 4 }
+                { "orderable": false, "targets": 4 },
+                { "className": "align-middle", "targets": "_all" },
             ],
             "language": {
                 "decimal":        "",
@@ -96,7 +97,7 @@
                     searchable: false,
                     "render": function (data) {
                         var data = data.split("-");
-                        var editButton = '<a href="/admin/' + data[0] + '/edit" class="btn btn-primary"><span class="text">編輯</span></a>';
+                        var editButton = '<a href="/admin/product/' + data[0] + '/edit" class="btn btn-primary"><span class="text">編輯</span></a>';
                         var statusButton = '';
                         
                         if (data[1] == 1) {

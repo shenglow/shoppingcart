@@ -30,13 +30,65 @@ class OrderController extends Controller
     /**
      * Display a listing of the resource.
      *
+     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $orders = Order::orderBy('created_at', 'desc')->get();
+        // process datatables ajax request
+        if ($request->ajax()) {
+            // request data
+            $start = $request->input('start');
+            $length = $request->input('length');
+            $columns = $request->input('columns');
+            $order = $request->input('order');
+            $search = $request->input('search');
 
-        return view('back.order', ['user' => $this->user, 'orders' => $orders]);
+            $orderBy = $columns[$order[0]['column']]['name'];
+            $orderType = $order[0]['dir'];
+            switch ($orderBy) {
+                case 'oid':
+                case 'created_at':
+                case 'recipient_name':
+                case 'recipient_tel':
+                case 'recipient_add':
+                case 'status':
+                    $orderBy = $orderBy;
+                    break;
+            }
+
+            // get data
+            $orders = Order::orderBy($orderBy, $orderType)
+                      ->offset($start)
+                      ->limit($length)
+                      ->get();
+
+            // count total record
+            $total = $orders->count();
+
+            foreach ($orders as $order) {
+                $result[] = array(
+                    'oid' => $order->oid,
+                    'created_at' => date("Y-m-d H:i:s", strtotime($order->created_at)),
+                    'recipient_name' => $order->recipient_name,
+                    'recipient_tel' => $order->recipient_tel,
+                    'recipient_add' => $order->recipient_add,
+                    'status' => $order->status,
+                    'action' => $order->oid
+                );
+            }
+
+            $response = array();
+            $response['success'] = true;
+            $response['recordsTotal'] = $total;
+            $response['recordsFiltered'] = $total;
+            $response['data'] = $result;
+            return json_encode($response);
+        }
+
+        return view('back.order', [
+            'user' => $this->user
+        ]);
     }
 
     /**

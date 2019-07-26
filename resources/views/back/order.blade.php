@@ -54,41 +54,7 @@
                             <th width="13%"></th>
                         </tr>
                     </thead>
-                    <tbody>
-                        @if (count($orders) > 0)
-                            @foreach ($orders as $order)
-                            <tr>
-                                <td class="align-middle"><input type="checkbox" name="order[]" value="{{ $order->oid }}"></td>
-                                <td class="align-middle">{{ $order->oid }}</td>
-                                <td class="align-middle">{{ $order->created_at }}</td>
-                                <td class="align-middle">{{ $order->recipient_name }}</td>
-                                <td class="align-middle">{{ $order->recipient_tel }}</td>
-                                <td class="align-middle">{{ $order->recipient_add }}</td>
-                                <td class="align-middle">
-                                    @switch($order->status)
-                                        @case('pending')
-                                            {{ '處理中' }}
-                                            @break
-                                        @case('shipped')
-                                            {{ '已出貨' }}
-                                            @break
-                                        @case('cancel')
-                                            {{ '取消' }}
-                                            @break
-                                        @default
-                                            {{ '未知' }}
-                                            @break
-                                    @endswitch
-                                </td>
-                                <td class="align-middle">
-                                    <a href="{{ route('admin.order.show', $order->oid) }}" class="btn btn-primary">
-                                        <span class="text">訂單明細</span>
-                                    </a>
-                                </td>
-                            </tr>
-                            @endforeach
-                        @endif
-                    </tbody>
+                    
                 </table>
             </div>
         </div>
@@ -135,7 +101,8 @@
         $('#order_table').DataTable({
             "order": [[1, 'asc']],
             "columnDefs": [
-                { "orderable": false, "targets": [0, 7] }
+                { "orderable": false, "targets": [0, 7] },
+                { "className": "align-middle", "targets": "_all" },
             ],
             "language": {
                 "decimal":        "",
@@ -157,7 +124,52 @@
             },
             "searching": false,
             "bLengthChange": false,
-            "pageLength": 10
+            "pageLength": 10,
+            "processing": true,
+            "serverSide": true,
+            "ajax": "{{ route('admin.order') }}",
+            "columns": [
+                {
+                    data: 'oid',
+                    name: 'oid',
+                    orderable: false,
+                    searchable: false,
+                    "render": function (data) {
+                        return '<input type="checkbox" name="order[]" value="' + data + '">'
+                    }
+                },
+                {data: 'oid', name: 'oid', searchable: false},
+                {data: 'created_at', name: 'created_at', searchable: false},
+                {data: 'recipient_name', name: 'recipient_name', searchable: false},
+                {data: 'recipient_tel', name: 'recipient_tel', searchable: false},
+                {data: 'recipient_add', name: 'recipient_add', searchable: false},
+                {
+                    data: 'status',
+                    name: 'status',
+                    searchable: false,
+                    "render": function(data) {
+                        switch(data) {
+                            case 'pending':
+                                return '處理中';
+                            case 'shipped':
+                                return '已出貨';
+                            case 'cancel':
+                                return '取消';
+                            default:
+                                return '未知';
+                        }
+                    }
+                },
+                {
+                    data: 'action',
+                    name: 'action',
+                    orderable: false,
+                    searchable: false,
+                    "render": function (data) {
+                        return '<a href="/admin/order/' + data + '" class="btn btn-primary"><span class="text">訂單明細</span></a>';
+                    }
+                }
+            ]
         });
     });
 </script>
