@@ -31,47 +31,19 @@
                 </span>
                 <span class="text">新增商品</span>
             </a>
-            @if (count($products) > 0)
-                <div class="table-responsive">
-                    <table class="table table-bordered text-center" id="product_table" width="100%" cellspacing="0">
-                        <thead>
-                            <tr>
-                                <th width="20%">名稱</th>
-                                <th width="20%">類別</th>
-                                <th width="20%">子類別</th>
-                                <th width="10%">價格</th>
-                                <th width="20%"></th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach ($products as $key => $product_list)
-                                @foreach ($product_list['products'] as $product)
-                                    <tr>
-                                        <td class="align-middle">{{ $product->name }}</td>
-                                        <td class="align-middle">{{ $product_list->name }}</td>
-                                        <td class="align-middle">{{ $product_list->subname }}</td>
-                                        <td class="align-middle">${{ number_format($product->price) }}</td>
-                                        <td class="align-middle">
-                                            <a href="{{ route('admin.product.edit', $product->pid) }}" class="btn btn-primary">
-                                                <span class="text">編輯</span>
-                                            </a>
-                                            @if ($product->is_enable)
-                                                <a href="{{ route('admin.product.changestatus', [$product->pid, 0]) }}" class="btn btn-danger">
-                                                    <span class="text">下架</span>
-                                                </a>
-                                            @else
-                                                <a href="{{ route('admin.product.changestatus', [$product->pid, !$product->is_enable]) }}" class="btn btn-success">
-                                                    <span class="text">上架</span>
-                                                </a>
-                                            @endif
-                                        </td>
-                                    </tr>
-                                @endforeach
-                            @endforeach
-                        </tbody>
-                    </table>
-                </div>
-            @endif
+            <div class="table-responsive">
+                <table class="table table-bordered text-center" id="product_table" width="100%" cellspacing="0">
+                    <thead>
+                        <tr>
+                            <th width="20%">名稱</th>
+                            <th width="20%">類別</th>
+                            <th width="20%">子類別</th>
+                            <th width="10%">價格</th>
+                            <th width="20%"></th>
+                        </tr>
+                    </thead>
+                </table>
+            </div>
         </div>
     </div>
 
@@ -109,6 +81,33 @@
                     "previous":   "上一頁"
                 }
             },
+            "processing": true,
+            "serverSide": true,
+            "ajax": "{{ route('admin.product.search') }}",
+            "columns": [
+                {data: 'name', name: 'name'},
+                {data: 'c_name', name: 'c_name'},
+                {data: 'c_subname', name: 'c_subname'},
+                {data: 'price', name: 'price'},
+                {
+                    data: 'action',
+                    name: 'action',
+                    orderable: false,
+                    searchable: false,
+                    "render": function (data) {
+                        var data = data.split("-");
+                        var editButton = '<a href="/admin/' + data[0] + '/edit" class="btn btn-primary"><span class="text">編輯</span></a>';
+                        var statusButton = '';
+                        
+                        if (data[1] == 1) {
+                            statusButton = '<a href="/admin/product/changestatus/'+ data[0] + '/0" class="btn btn-danger"><span class="text">下架</span></a>';
+                        } else {
+                            statusButton = '<a href="/admin/product/changestatus/'+ data[0] + '/1" class="btn btn-success"><span class="text">上架</span></a>';
+                        }
+                        return editButton + ' ' + statusButton;
+                    }
+                }
+            ]
         });
     });
 </script>
