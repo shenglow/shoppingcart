@@ -336,6 +336,8 @@ class ProductController extends Controller
                 if (isset($request->input('quantity')[$key])) {
                     $quantity = $request->input('quantity')[$key];
                 }
+            } else {
+                continue;
             }
             
             $productSpecification = productSpecification::where('psid', $key)->where('pid', $product->pid)->first();
