@@ -48,11 +48,11 @@
                             <div class="pull-right">
                                 <label class="control-label">Sort&nbsp;By:</label>
                                 <select class="form-control input-sm" id="order">
-                                    <option value="default" selected="selected">預設排序</option>
-                                    <option value="name-asc">名稱 (小 - 大)</option>
-                                    <option value="name-desc">名稱 (大 - 小)</option>
-                                    <option value="price-asc">價格 (低 &gt; 高)</option>
-                                    <option value="price-desc">價格 (高 &gt; 低)</option>
+                                    <option value="default">預設排序</option>
+                                    <option value="name-asc" @if($order == 'name-asc') selected @endif>名稱 (小 - 大)</option>
+                                    <option value="name-desc" @if($order == 'name-desc') selected @endif>名稱 (大 - 小)</option>
+                                    <option value="price-asc" @if($order == 'price-asc') selected @endif>價格 (低 &gt; 高)</option>
+                                    <option value="price-desc" @if($order == 'price-desc') selected @endif>價格 (高 &gt; 低)</option>
                                 </select>
                             </div>
                         </div>

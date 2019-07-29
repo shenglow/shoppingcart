@@ -82,6 +82,7 @@ class ProductController extends Controller
             'categories' => $arr_categories,
             'popular_products' => $popular_products,
             'cid' => $cid,
+            'order' => $order,
             'products' => $products,
             'topCart' => $topCart
         ]);
