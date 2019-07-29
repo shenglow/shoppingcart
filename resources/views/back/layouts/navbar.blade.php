@@ -69,12 +69,12 @@
 </div>
 
 <!-- Nav Item - Tables -->
-<li class="nav-item @yield('nav_setting')">
+<!-- <li class="nav-item @yield('nav_setting')">
     <a class="nav-link" href="settings.html">
         <i class="fas fa-fw fa-key"></i>
         <span>系統設定</span>
     </a>
-</li>
+</li> -->
 
 <!-- Nav Item - Tables -->
 <li class="nav-item @yield('nav_faq')">
